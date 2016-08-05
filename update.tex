@@ -1,0 +1,7 @@
+\section{Updates}
+Let $\Phi$ be the $|S|\times k$ feature matrix, whose $s^{th}$ row is given by $\phi^\top(s)$. Let the approximate value function be denoted by $\tilde{J}\approx \Phi \theta$ and let $v$ denote an auxilliary variable that esitmates $G=\mathbf{E}[\phi\phi^\top]$ and let $G'=\mathbf{E}[\phi\phi'^\top]$, where $\phi'$ is the feature of the next state. Let $\delta \theta=r+\gamma \phi'^\top\theta -\phi^\top \theta$ denote the temporal difference. The updates are as below
+\begin{align}
+v_{n+1}&=v_{n}+\alpha(n)(\delta\theta)+ \gamma\phi\phi'^\top(\theta_{n}-\theta_{n-1})\\
+\theta_{n+1}&=v_n-\phi\phi^\top \theta_n.
+\end{align}
+
