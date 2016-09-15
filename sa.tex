@@ -1,0 +1,21 @@
+\section{Stochastic Approximation}
+A typical single timescale stochastic recursion is given by 
+\begin{align}\label{sa}
+x_{t+1}=x_t+\alpha_t(f(x_t)+M_{t+1}),
+\end{align}
+where $x_t\in \R^n, \forall t\geq 0$, $f\colon \R^n \ra \R^n$ is a Lipschitz continuous function and $M_{t+1}, t\geq 0$ are martingale difference noise terms. Under reasonable conditions, we can analyze the iterates in \eqref{sa} by studying its average behaviour. To this end, in addition to Lipschitz continuity of $f$,  we need following assumptions.\par
+\begin{assumption}\label{saassump}\hspace{10pt}\\
+\vspace{-20pt}
+\begin{enumerate}
+\item $\alpha_t\ra 0, t\ra\infty$, $\sum_{t\geq 0}\alpha_t =\infty$ and $\sum_{t\geq 0}\alpha^2_t <\infty$.
+\item $\{M_t\}$ is a martingale difference sequence with respect to an increasing family of $\sigma$-fields $\mathcal{F}_t\stackrel{\cdot}{=}\sigma(x_0,M_1,\ldots,M_t),t\geq 0$, such that
+$
+\E[M_{t+1}|\F_t]=0 a.s., t\geq 0.
+$. Further, $\{M_t\}$ are square-integrable i.e., $\E[M_{t+1}|\F_t]\leq K(1+\parallel x_t\parallel^2), a.s., \forall t\geq 0$.
+\item $\sup_t||x_t|||<\infty$
+\item\label{stab} The ordinary differential equation (ODE) $\dot{x}(t)=f(x(t))$, has a globally unique asymptotically stable equilibrium $x^*\in \R^n$.
+\end{enumerate}\end{assumption}
+Equipped with the above assumptions we state an useful result from \cite{}
+\begin{theorem}\label{sat}
+Under the above assumptions we have $x_t\ra x^*$ as $t\ra\infty$. 
+\end{theorem}

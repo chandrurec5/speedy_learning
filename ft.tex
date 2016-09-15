@@ -1,0 +1,42 @@
+\section{Finite Time Analysis}
+We now present the finite time analysis for the family of TD algorithms. Consider the following stochastic recursion
+\begin{align}\label{gensa}
+x_{n+1}=x_t+\alpha_t(g-Hx_t)+\alpha_tM_{t+1}
+\end{align}
+From results of \Cref{sec:sa} we know that the above recursion converges to $x^*=H^{-1}g$. We now will study the finite time performance of the above recursion
+\begin{align*}
+\begin{split}
+x_{t+1}-x^*
+&=x_t+\alpha_t(g-Hx_t)+\alpha_t(M_{t+1})-H^{-1}g\\
+&=(I-\alpha_t H)(x_t-x^*)+\alpha_t M_{t+1}\\
+&=\underbrace{\prod_{i=0}^t(I-\alpha_i H)(x_0-x^*)}_{\text{Bias}}+\underbrace{\sum_{i=0}^t \prod_{i+1\leq k<t} (I-\alpha_{k}H)\alpha_i M_{i+1}}_{\text{Noise}}
+\end{split}
+\end{align*}
+
+\subsection{Rupert-Polyak Averaging with constant step size}
+Let $\alpha_t=\alpha$ in \eqref{gensa} and then consider $\bar{x}_t=\frac{1}{t+1}\sum_{k=0}^t x_k$, we then have
+\begin{align*}
+\bar{x}_t-x^*&=\frac{1}{t+1}\big(\sum_{i=0}^t (I-\alpha H)^{t-i}(x_0-x^*)+\alpha \sum_{i=0}^t \sum_{k=0}^{t-i} (I-\alpha H)^{t-i-k} M_{i+1}\big)
+\end{align*}
+Let $\bar{\lambda}$ be the eigen value of $(I-\alpha H)$ with maximum modulus, then we have
+\begin{comment}
+\begin{align*}
+\begin{split}
+|\E[\bar{x}_t-x^*]|&=|\frac{1}{t+1}\big(\sum_{i=0}^t (I-\alpha H)^{t-i}(x_0-x^*)|\\
+&\leq \frac{1}{t+1}\frac{1}{1-\bar{\lambda}}|x_0-x^*|
+\end{split}
+\end{align*}
+\end{comment}
+\begin{align}\label{rates}
+\E[\parallel\bar{x}_t-x^*\parallel^2]&\leq\frac{1}{(t+1)^2}\frac{1}{(1-\bar{\lambda})^2} \big(\parallel(x_0-x^*)\parallel^2+ \alpha^2\sum_{i=0}^t \E\parallel M_{i+1}\parallel^2\big)
+\end{align}
+\begin{itemize}
+\item When all eigen values of $H$ have positive real parts, then for diminishing step sizes \eqref{gensa} tracks the ODE $\dot{x}(t)=(g-Hx(t))$. Suppose the eigen value of $H$ with smallest real part, say $\mu$ had no imaginary component, then it dictates the asymptotic rate of the ODE. Similarly, the modulus of the eigen value dictates the rate at which the bias is forgotten in \eqref{rates}. Further, in the case when the eigen value of $H$ with smallest real part, say $\mu$ had no imaginary component, then the rate in \eqref{rates} is then dictated by $\bar{\lambda}=(I-\alpha\mu)$. 
+\item Given that the rates with respect to time are the same for all the stochastic approximation schemes of the form \eqref{gensa}, algorithms can be designed using the following criteria:
+\begin{enumerate}
+\item Designing $H$ and $g$ so that $H^{-1}g$ is equal to the TD solution.
+\item Designing a desirable value of $\bar{\lambda}$ since it plays a role both in the bias as well as noise terms. 
+\end{enumerate}
+\end{itemize}
+
+\subsection{Optimal Step Size}

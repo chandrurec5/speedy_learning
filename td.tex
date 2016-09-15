@@ -1,0 +1,51 @@
+\section{Temporal Difference Learning}
+The \emph{temporal difference} (TD) class of learning algorithms solve the projected Bellman equation. We now present the those members of the TD family of algorithms which make incremental updates to the weight vector at each iteration\footnote{We do not discuss the LSTD. However, we discuss iLSTD which fits our criterion of incremental updates}. We also present the motivation behind the derivation of the various update rules. In what follows $\{\alpha_t \geq 0,\forall t\geq 0\}$ is a sequence of non-negative step-sizes and $\theta_t\in \R^n \forall t\geq 0$ denotes the weight vector at time $t$.\par
+The $TD(0)$ algorithm is given by the following update rule
+\begin{align}\label{tdzero}
+\theta_{t+1}=\theta_t+\alpha_t(\underbrace{R(s_t,a_t)+\gamma \phi(s_{t+1})\theta_t-\phi(s_t)\theta_t}_{{\delta_t}}){\phi(s_t)}^\top,
+\end{align}
+where $\phi(s_t)^\top \in \R^n$ is the feature of state $s_t$ and is the $s^{th}$ row of the feature matrix $\Phi$. In \eqref{tdzero}, $\delta_t$ is the temporal difference term which is an estimate of the error in the value function specified by $\theta_t$. The $TD(0)$ update can also be re-written as
+\begin{align}\label{tdzero}
+\theta_{t+1}=\theta_t+\alpha_t(b_\pi-A_\pi)\theta_t+\alpha_t M_{t+1}
+\end{align}
+where $b_\pi=\Phi^\top D_\pi R_\pi$ and $A_\pi=Phi^\top D_\pi (I-\gamma P_\pi)\Phi$. In order to arrive at \eqref{tdzero} we have made use of the fact that $s_t\sim D_\pi, a_t\sim\pi(s_t,\cdot)$, $\mathbf{E}[\delta_t|s_t]= \big(R_\pi(s_t)+\gamma (P_\pi J_\theta)(s_t) -J_\theta(s_t)\big)$ and letting $M_{t+1}=\delta_t\phi(s_t)^\top-\mathbf{E}[\delta_t{\phi(s_t)}^\top]$.\par
+As a consequence of \Cref{sat} we have the following convergence result for TD.
+\begin{theorem}[Convergence of TD]\label{tdconv}
+The $TD(0)$ algorithm in \eqref{tdzero} converges to the solution of the PBE when $A_\pi$ has all its Eigen values with positive real parts.
+\end{theorem}
+\subsection{Off-policy $TD(0)$}
+The $TD(0)$ can exhibit divergent behaviour in the \emph{off-policy} setting. In the \emph{off-policy} setting the recursion in \eqref{tdzero} has to be modified as follows
+\begin{align}\label{tdzerooff}
+\theta_{t+1}=\theta_t+\alpha_t(\rho_t(s_t,a_t){R(s_t,a_t)+\gamma \phi(s_{t+1})\theta_t-\phi(s_t)\theta_t}){\phi(s_t)}^\top,
+\end{align}
+where $\rho_t\stackrel{\cdot}{=}\frac{\pi(s_t,a_t)}{\mu(s_t,a_t)}$ is the importance sampling ratio between the behaviour policy $\mu$ and target policy $\pi$. The recursion in \eqref{tdzerooff} can be re-written as
+\begin{align}\label{tdzerooffsa}
+\theta_{t+1}=\theta_t+\alpha_t(b_\pi-A^\mu_\pi)\theta_t+\alpha_t M_{t+1},
+\end{align}
+where $A^{\mu}_\pi=\Phi^\top D_\mu (I-\gamma P_\pi)\Phi$ , where $\mu$ is the behaviour policy used to sample the data. The undoing of $TD(0)$ in the off-policy is due to the fact that all the eigen values of $A^\mu_\pi$ cannot be guaranteed to have positive real parts. This condition can be demonstrated even in simple example as discussed below
+\begin{example}
+\end{example}
+\section{Gradient Temporal Difference Learning}
+The instability of $TD(0)$ is due to the fact that it is not a true gradient descent algorithm. The first gradient-TD (GTD) algorithm was proposed in \cite{} and is based on minimizing the \emph{norm of the expected TD update} (NEU) given by
+\begin{align}\label{neu}
+NEU(\theta)=\E[\rho\phi^\top\delta(\theta)]\E[\rho\phi^\top\delta(\theta)]
+\end{align}
+The GTD scheme based is on the gradient of the above expression which is given by $-\frac{1}{2}\nabla NEU(\theta)=\E[\rho (\phi-\gamma\phi’)^\top \phi]\E[\rho \phi^\top\delta(\theta)]$. Since the gradient is a product of two expectation we cannot use a sample product (due to the presence of correlations). The GTD addresses this issue by estimating $\E[\rho\delta\phi^\top]$ in a separate recursion. The GTD updates can be given by
+\begin{align}
+\begin{split}
+y_{t+1}&=y_t+\alpha_t(\rho_t\phi^\top\delta_t -y_t)\\
+\theta_{t+1}&=\theta_t+\alpha_t\rho_t(\phi(s_t)-\gamma\phi(s_{t+1}))^\top\phi(s_t)y_t
+\end{split}
+\end{align}
+Instead of NEU, the \emph{mean-square projected Bellman Error} (MSPBE) can also be minimized. The MSPBE is defined as
+\begin{align}\label{mspbe}
+MSPBE(\theta)=\parallel J_\theta-\Pi T_\pi J_\theta \parallel^2_D
+\end{align}
+The GTD2 algorithm was proposed in \cite{} based on minimizing \eqref{mspbe}. The GTD2 updates are given by
+\begin{align}
+\begin{split}
+y_{t+1}&=y_t+\beta_t\phi(s_t)^\top(\rho_t\delta_t-\phi(s_t)y_t)\\
+\theta_{t+1}&=\theta_t+\alpha_t\rho_t(\phi(s_t)-\gamma\phi(s_{t+1}))^\top\phi(s_t)y_t
+\end{split}
+\end{align}
+\subsection{Saddle Point Formulation}

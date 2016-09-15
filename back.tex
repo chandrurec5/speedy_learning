@@ -1,0 +1,37 @@
+\section{Background}
+We now present a brief overview of Markov Decision Processes (MDPs) which is a framework to describe the RL setting, i.e., the agent's interaction with the environment. An MDP is a five tuple and is denoted by $M=\{S,A,P,R,\gamma\}$, where $S$ is the state space, $A$ is the action space, $P=(p_a(s,s'),a\in A,s,s’\in S)$ is the probability transition kernel that specifies the probability of transitioning from state $s$ to $s'$ when the agent taking an action $a$, and $R(s,a)\colon S\times A\ra \R$ is the reward for taking an action $a$ in state $s$ and $0<\gamma<1$ is a given discount factor. A stationary deterministic policy (or simply a policy) is a denoted by $\pi=(\pi(s,\cdot),s\in S)$, where $\pi(s,\cdot)$ is a probability distribution over the set of actions. The infinite horizon discounted reward of a policy $\pi$ is given by
+\begin{align}
+J_\pi=\mathbf{E}[\sum_{t=0}^\infty \gamma^t R(s_t,a_t)| s_0=s, \pi],
+\end{align}
+and is the discounted sum of rewards starting from state $s$ and taking actions according to policy $\pi$.\par
+It is of interest to compute the optimal policy $\pi^*$ which yields the maximum reward starting from any given state. A key step in computing the optimal policy is \emph{policy evaluation}, i.e.,  computing $J_\pi$ of a given policy $\pi$.\par
+\subsection{Bellman Equation}
+The value function $J_\pi$ can be computed by solving the Bellman equation (BE) given below:
+\begin{align}\label{be}
+J_\pi=T_\pi J_\pi,
+\end{align}
+where in \eqref{be} $T_\pi\colon \R^{|S|}\ra \R^{|S|}$ is the Bellman operator. The Bellman operators is defined in terms of the model parameters of the MDP as follows
+\begin{align}\label{bo}
+(T_\pi J)(s)=\sum_{a\in A}\pi(s,a)(R(s,a)+\gamma \sum_{s’\in S}p_a(s,s’) J(s’))),
+\end{align}
+where $J_\pi=(J_\pi(s),\forall s\in S)$. The BE can thus be re-written as 
+\begin{align}\label{be}
+J_\pi=R_\pi+\gamma P_\pi J_\pi,
+\end{align}
+where $R_\pi(s)=\sum_{a\in A}\pi(s,a) R(s,a)$ and $p_\pi(s,s’)=\sum_{a\in A}\pi(s,a)p_a(s,s’)$. Note that the BE is a linear system of equations in $|S|$ variables.\par
+\subsection{Function Approximation}
+The term \emph{curse-of-dimensionality} denotes the fact that $|S|$ scales exponentially in the number of state variables. Due to the curse, MDPs in practice tend to have large number of states. Solving the linear system in \eqref{be} involves matrix inversion and requires a minimum of $O(|S|^2)$ computations, and hence it is impractical to solve the BE when $|S|$ is large. A practical way to address this issue is to approximate the value function. A widely adopted approach is function approximation, wherein the value function is approximated by a parameterized family of functions $J_\pi\approx J_\theta= \Phi(\theta^*)$, where $\{\Phi(\theta), \theta\in \R^n\}$ is the parameterized family and $\theta^*\in \R^n$ is the optimal parameter. Note that the parameter $\theta$ belongs to $\R^n$ and dimensionality reduction can be achieved by choosing $n<<|S|$. Linear parameterization is the most common, wherein, $J_\pi\approx J_\theta \Phi\theta^*$, with $\Phi$ as a $|S|\times n$ feature matrix.
+\subsection{Projected Bellman Equation}
+Once $\Phi$ is fixed, we have to come up with a procedure to compute out $\theta^*$. An immediate idea is to take a cue from linear regression and look at the following quadratic loss function that quantifies the approximation error.
+\begin{align}
+L(\theta)=\sum_{s\in S}(J_\theta-TJ_\theta)^2.
+\end{align}
+The above penalty function is called \emph{mean-square-Bellman-error} (MSBE) and a way to compute $\theta^*$ would be to minimize the MSBE. A caveat however is that $TJ_\theta$ does not usually belong to the subspace belonging to spanned by the columns of $\Phi$. As a result, $TJ_\theta$ cannot be expressed as $\Phi \theta’$ for any $\theta’\in \R^n$. Due to this reason, none of the TD algorithms consider the MSBE as the error criterion.\par
+A way to side step the issue of non-representability of $TJ_\theta$, we can instead consider a projected Bellman equation (PBE) given by
+\begin{align}
+\begin{split}
+J_{\theta^*}&=\Pi T_\pi J_{\theta^*},\\
+\Phi {\theta^*}&=\Pi T_\pi \Phi{\theta^*},
+\end{split}
+\end{align}
+where $\Pi=\Phi(\Phi^\top D_\pi \Phi)^{-1}\Phi^\top$ is the least squares projection operator and $D_\pi$ is a diagonal matrix with the diagonal entry $D_\pi(s,s)$ as the stationary distribution of state $s$ under policy $\pi$.
