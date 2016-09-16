@@ -1,1 +1,13 @@
 \section{A new stable TD algorithm}
+We now modify the predictor corrector algorithm as follows
+\begin{align}
+x^m_{t}&=x_t+\beta(g-Hx_t)\\
+x_{t+1}&=x_t+\alpha_t(g-Hx^m_t)
+\end{align} 
+The above recursion can then be written as
+\begin{align}
+x_{t+1}= (I-\alpha_t (H+\beta H^2))x_t+\alpha_t(g-\beta H g)
+\end{align}
+Notice that the matrix $H+\beta H^2$ can always be made have all real values positive.
+\begin{example}
+\end{example}
