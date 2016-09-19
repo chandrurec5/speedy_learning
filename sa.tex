@@ -6,7 +6,7 @@ x_{t+1}=x_t+\alpha_t(f(x_t)+M_{t+1}),
 where $x_t\in \R^n, \forall t\geq 0$, $f\colon \R^n \ra \R^n$ is a Lipschitz continuous function and $M_{t+1}, t\geq 0$ are martingale difference noise terms. Under reasonable conditions, we can analyze the iterates in \eqref{sa} by studying its average behaviour. To this end, in addition to Lipschitz continuity of $f$,  we need following assumptions.\par
 \begin{assumption}\label{saassump}\hspace{10pt}\\
 \vspace{-20pt}
-\begin{enumerate}
+\begin{enumerate}[leftmargin=*]
 \item $\alpha_t\ra 0, t\ra\infty$, $\sum_{t\geq 0}\alpha_t =\infty$ and $\sum_{t\geq 0}\alpha^2_t <\infty$.
 \item $\{M_t\}$ is a martingale difference sequence with respect to an increasing family of $\sigma$-fields $\mathcal{F}_t\stackrel{\cdot}{=}\sigma(x_0,M_1,\ldots,M_t),t\geq 0$, such that
 $
@@ -19,3 +19,13 @@ Equipped with the above assumptions we state an useful result from \cite{}
 \begin{theorem}\label{sat}
 Under the above assumptions we have $x_t\ra x^*$ as $t\ra\infty$. 
 \end{theorem}
+The algorithms of interest in this paper can be written as linear updates that assume the following form:
+\begin{align}\label{linearrec}
+x_{t+1}=x_t+\alpha_t(g-Hx_t),
+\end{align}
+where $x_t\in \R^n$ are the iterates, $H\in \R^{n\times n}$ the design matrix and $g\in \R^n$ is the design vector. In what follows, we use the notation $(g,H)$ to specify the design of the linear recursion in \eqref{linearrec}.
+The following corollary is a direct consequence of \Cref{saassump}~\ref{stab} and \Cref{sat}
+\begin{corollary}\label{linstab}
+The iterates $x_t\in \R^n$ in the linear stochastic update rule in \eqref{linearrec} converge $x^*=H^{-1}g$ as $t\ra\infty $iff all the Eigen values of $H$ have positive real parts.
+\end{corollary}
+An important point to note is that the linear update rule in \eqref{linearrec} can be viewed as an Euler discretization of the ODE $\dot{x}(t)=(g-Hx(t))$.
