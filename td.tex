@@ -60,5 +60,13 @@ y_{t+1}&=y_t+\beta_t\phi(s_t)^\top(\rho_t\delta_t-\phi(s_t)y_t)\\
 \theta_{t+1}&=\theta_t+\alpha_t\rho_t(\phi(s_t)-\gamma\phi(s_{t+1}))^\top\phi(s_t)y_t
 \end{split}
 \end{align}
-\subsection{Saddle Point Formulation}
+The design of GTD2 is give by $g_2=(b_\pi,0)$, $H_2==\begin{bmatrix}-\Phi^\top D_\mu\Phi &-\Phi^\top D_\mu (\Phi -\gamma P_\pi\Phi) \\ (\Phi -\gamma P_\pi\Phi)^\top D_\mu\Phi &0 \\ \end{bmatrix}$
+%\subsection{Saddle Point Formulation}
 \subsection{Speedy Learning}
+Speedy Q-learning was introduced in \cite{} and uses a `speed-up’ term to achieve better convergence rates. The SQL updates for the full state representation is given by
+\begin{align}\label{sql}
+\begin{split}
+J_{t+1}(s)=J_t(s)+\alpha_t\big(R(s_t,a_t)+\gamma J_{t-1}(s_{t+1})-J_{t}(s_t) \big)+\\(1-\alpha_t)\big((R(s_t,a_t)+\gamma J_t(s_t))-(R(s_t,a_t)+\gamma J_{t-1}(s_t,a_t))\big)
+\end{split}
+\end{align}
+The design corresponding to SQL is $((I-\gamma P_\pi)^{-1}R_\pi,I)$.
