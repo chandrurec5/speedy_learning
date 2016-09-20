@@ -1,16 +1,36 @@
 \section{Synthesis of New algorithms}
 \subsection{Stories of Failures}
-
-\subsection{Stories of Success}
-Consider the ODE given by
+To illustrate the usefulness of the ODE based framework, consider the following RL algorithm called SQLFA which combines SQL and function approximation for the purpose of on-policy evaluation:
+\begin{align}\label{sqlfa}
+\begin{split}
+&\theta_{t+1}=\theta_t+\phi(s_t)^\top \alpha_t\big(R(s_t,a_t)+\gamma \phi(s_{t+1})\theta_{t-1}\\&-\phi(s_t)\theta_t +(1-\alpha_t)(\gamma \phi(s_{t+1})\theta_t-\gamma \phi(s_{t+1})\theta_{t-1}\big)
+\end{split}
+\end{align}
+The ODE corresponding to SQLFA is given by
 \begin{align}
-\dot{x}(t)=(g-Hx(t))
+\begin{split}
+&\dot{\theta}(t)=(b_\pi-A_\pi\theta_t)+\gamma\Phi^\top D_\pi P_\pi\Phi^\top\dot{\theta}(t)\\
+&\dot{\theta}(t)=(I-\gamma\Phi^\top D_\pi P_\pi\Phi)^{-1}(b_\pi-A_\pi\theta_t)
+\end{split}
 \end{align}
-with initial condition $x(0)=x_0$. The Euler discretization of the above ODE leads to the following update rule
-\begin{align}\label{euler}
-x_{t+1}=x_t+\alpha_t(g-Hx_t).
+
+\begin{align}
+\begin{split}
+\theta_t&=\theta_t+\alpha_t(y_t-\phi(s_t)^\top(\phi(s_t)\theta_t-\gamma \phi(s_{t+1})\theta_t))\\
+y_{t+1}&=y_{t}+\alpha_t(\delta_t)
+\end{split}
 \end{align}
-The \emph{Predictor-Corrector} discretization of the ODE is the following update rule
+The design corresponding to the above is given by $g_3=\begin{bmatrix}0\\ b_\pi\end{bmatrix}$, and $H_3=\begin{bmatrix} -A_\pi & I \\ -A_\pi & 0\end{bmatrix}$. The Eigen values of this design can be found by solving the following equations
+\begin{align}
+|\Lambda I-H|=\begin{bmatrix} \Lambda+A_\pi & -I \\ A_\pi & \Lambda\end{bmatrix}=(\Lambda+A_\pi)\Lambda+A_\pi=0
+\end{align}
+Thus if $\mu$ is a real Eigen value of $A_\pi$ and $\mu’_{1,2}$ corresponding Eigen values of $H_3$, we have the relation
+\begin{align}
+\mu’_{i}=\frac{\mu\pm\sqrt{\mu^2-4\mu}}{2}, i=1,2
+\end{align}
+Notice that for small values of $\mu$, $\mu’_i, i=1,2$ have imaginary parts and the real part is $\mu/2$. Thus this new scheme will be oscillatory (due to imaginary parts) and have poor convergence compared to \tdo since the real part gets divided by a factor of $2$.
+\subsection{Stories of Success}
+We mentioned that the linear update rule in \eqref{linearrec} is an Euler discretization of the ODE in \eqref{linearode}. However, there are different ways to discretize a given ODE and the \emph{Predictor-Corrector} discretization of the \eqref{linearode} is the following update rule
 \begin{align}
 x^m_{t}&=x_t+\alpha_t(g-Hx_t)\\
 x_{t+1}&=x_t+\alpha_t(g-Hx^m_t)

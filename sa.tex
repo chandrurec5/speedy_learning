@@ -28,4 +28,5 @@ The following corollary is a direct consequence of \Cref{saassump}~\ref{stab} an
 \begin{corollary}\label{linstab}
 The iterates $x_t\in \R^n$ in the linear stochastic update rule in \eqref{linearrec} converge $x^*=H^{-1}g$ as $t\ra\infty $iff all the Eigen values of $H$ have positive real parts.
 \end{corollary}
-An important point to note is that the linear update rule in \eqref{linearrec} can be viewed as an Euler discretization of the ODE $\dot{x}(t)=(g-Hx(t))$.
+An important point to note is that the linear update rule in \eqref{linearrec} can be viewed as an Euler discretization of the ODE 
+\begin{align}\label{linearode}\dot{x}(t)=(g-Hx(t))\end{align}

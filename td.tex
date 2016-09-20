@@ -8,7 +8,7 @@ where $\phi(s_t)^\top \in \R^n$ is the feature of state $s_t$ and is the $s^{th}
 \theta_{t+1}=\theta_t+\alpha_t(b_\pi-A_\pi)\theta_t+\alpha_t M_{t+1}
 \end{align}
 where $b_\pi=\Phi^\top D_\pi R_\pi$ and $A_\pi=\Phi^\top D_\pi (I-\gamma P_\pi)\Phi$. In order to arrive at \eqref{tdzero} we have made use of the fact that $s_t\sim D_\pi, a_t\sim\pi(s_t,\cdot)$, $\mathbf{E}[\delta_t|s_t]= \big(R_\pi(s_t)+\gamma (P_\pi J_\theta)(s_t) -J_\theta(s_t)\big)$ and letting $M_{t+1}=\delta_t\phi(s_t)^\top-\mathbf{E}[\delta_t{\phi(s_t)}^\top]$.\par
-Note that the design of TD($0$) is given by $(b_\pi,A_\pi)$.
+Note that the design of TD($0$) is given by $\{b_\pi,A_\pi\}$.
 \subsection{Off-policy divergence of TD($0$)}
 The TD($0$) algorithm can exhibit divergent behaviour in the \emph{off-policy} setting. In the \emph{off-policy} setting the recursion in \eqref{tdzero} has to be modified as follows
 \begin{align}\label{tdzerooff}
@@ -18,7 +18,7 @@ where $\rho_t\stackrel{\cdot}{=}\frac{\pi(s_t,a_t)}{\mu(s_t,a_t)}$ is the import
 \begin{align}\label{tdzerooffsa}
 \theta_{t+1}=\theta_t+\alpha_t(b_\pi-A^\mu_\pi)\theta_t+\alpha_t M_{t+1},
 \end{align}
-where $A^{\mu}_\pi=\Phi^\top D_\mu (I-\gamma P_\pi)\Phi$ , where $\mu$ is the behaviour policy used to sample the data. Thus the design of \tdo can in the off-policy case is $(b_\pi,A^\mu_\pi)$.
+where $A^{\mu}_\pi=\Phi^\top D_\mu (I-\gamma P_\pi)\Phi$ , where $\mu$ is the behaviour policy used to sample the data. Thus the design of \tdo can in the off-policy case is $\{b_\pi,A^\mu_\pi\}$.
 The undoing of $TD(0)$ in the off-policy is due to the fact that all the eigen values of $A^\mu_\pi$ cannot be guaranteed to have positive real parts. This condition can be demonstrated via the following simple example from \cite{}.
 \begin{example}
 Consider a two state MDP with $P_\pi=
@@ -48,7 +48,7 @@ y_{t+1}&=y_t+\alpha_t(\rho_t\phi^\top\delta_t -y_t)\\
 \theta_{t+1}&=\theta_t+\alpha_t\rho_t(\phi(s_t)-\gamma\phi(s_{t+1}))^\top\phi(s_t)y_t
 \end{split}
 \end{align}
-The design of GTD is given by $(g_1,H_1)$ where $g_1=\begin{bmatrix}b_\pi\\ 0\\ \end{bmatrix}$, $H_1=\begin{bmatrix}-I &-\Phi^\top D_\mu (\Phi -\gamma P_\pi\Phi) \\ (\Phi -\gamma P_\pi\Phi)^\top D_\mu\Phi &0 \\ \end{bmatrix}$.\par
+The design of GTD is given by $\{g_1,H_1\}$ where $g_1=\begin{bmatrix}b_\pi\\ 0\\ \end{bmatrix}$, $H_1=\begin{bmatrix}-I &-\Phi^\top D_\mu (\Phi -\gamma P_\pi\Phi) \\ (\Phi -\gamma P_\pi\Phi)^\top D_\mu\Phi &0 \\ \end{bmatrix}$.\par
 Instead of NEU, the \emph{mean-square projected Bellman Error} (MSPBE) can also be minimized. The MSPBE is defined as
 \begin{align}\label{mspbe}
 MSPBE(\theta)=\parallel J_\theta-\Pi T_\pi J_\theta \parallel^2_D
@@ -60,13 +60,17 @@ y_{t+1}&=y_t+\beta_t\phi(s_t)^\top(\rho_t\delta_t-\phi(s_t)y_t)\\
 \theta_{t+1}&=\theta_t+\alpha_t\rho_t(\phi(s_t)-\gamma\phi(s_{t+1}))^\top\phi(s_t)y_t
 \end{split}
 \end{align}
-The design of GTD2 is give by $g_2=(b_\pi,0)$, $H_2==\begin{bmatrix}-\Phi^\top D_\mu\Phi &-\Phi^\top D_\mu (\Phi -\gamma P_\pi\Phi) \\ (\Phi -\gamma P_\pi\Phi)^\top D_\mu\Phi &0 \\ \end{bmatrix}$
+The design of GTD2 is given by $\{g_2,H_2\}$, where $g_2=(b_\pi,0)$, $H_2==\begin{bmatrix}-\Phi^\top D_\mu\Phi &-\Phi^\top D_\mu (\Phi -\gamma P_\pi\Phi) \\ (\Phi -\gamma P_\pi\Phi)^\top D_\mu\Phi &0 \\ \end{bmatrix}$
 %\subsection{Saddle Point Formulation}
 \subsection{Speedy Learning}
 Speedy Q-learning was introduced in \cite{} and uses a `speed-up’ term to achieve better convergence rates. The SQL updates for the full state representation is given by
 \begin{align}\label{sql}
 \begin{split}
-J_{t+1}(s)=J_t(s)+\alpha_t\big(R(s_t,a_t)+\gamma J_{t-1}(s_{t+1})-J_{t}(s_t) \big)+\\(1-\alpha_t)\big((R(s_t,a_t)+\gamma J_t(s_t))-(R(s_t,a_t)+\gamma J_{t-1}(s_t,a_t))\big)
+J_{t+1}(s)=J_t(s)+\alpha_t\big(R(s_t,a_t)+\gamma J_{t-1}(s_{t+1})-J_{t}(s_t) \big)+\\(1-\alpha_t)\big((R(s_t,a_t)+\gamma J_t(s_{t+1}))-(R(s_t,a_t)+\gamma J_{t-1}(s_{t+1}))\big)
 \end{split}
 \end{align}
-The design corresponding to SQL is $((I-\gamma P_\pi)^{-1}R_\pi,I)$.
+The above scheme is the Euler discretization of the following ODE
+\begin{align}
+\dot{J_\pi}(t)=(R_\pi+\gamma P_\pi J_\pi(t) -J_\pi(t))+\gamma P_\pi\dot{J_\pi}(t)
+\end{align}
+The design corresponding to SQL is $\{(I-\gamma P_\pi)^{-1}R_\pi,I\}$.

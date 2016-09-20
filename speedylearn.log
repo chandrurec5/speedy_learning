@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  19 SEP 2016 23:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  20 SEP 2016 10:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -620,7 +620,7 @@ Missing character: There is no ™ in font cmr10!
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
-) (./sa.tex) (./td.tex [3]
+) (./sa.tex [3]) (./td.tex
 Overfull \hbox (3.93059pt too wide) in paragraph at lines 5--5
 [] 
  []
@@ -640,56 +640,92 @@ Underfull \hbox (badness 10000) in paragraph at lines 50--51
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 50--51
-\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 g[]; H[]\OT1/cmr/m/n/10 )$ where $\OML/cmm/m/
-it/10 g[] \OT1/cmr/m/n/10 = []$, $\OML/cmm/m/it/10 H[] \OT1/cmr/m/n/10 =
+\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 g[]; H[]\OMS/cmsy/m/n/10 g$ \OT1/cmr/m/n/10 
+where $\OML/cmm/m/it/10 g[] \OT1/cmr/m/n/10 = []$, $\OML/cmm/m/it/10 H[] \OT1/c
+mr/m/n/10 =
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 62--65
+\OT1/cmr/m/n/10 The de-sign of GTD2 is given by
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 62--65
+\OMS/cmsy/m/n/10 f\OML/cmm/m/it/10 g[]; H[]\OMS/cmsy/m/n/10 g$\OT1/cmr/m/n/10 ,
+ where $\OML/cmm/m/it/10 g[] \OT1/cmr/m/n/10 = (\OML/cmm/m/it/10 b[]; \OT1/cmr/
+m/n/10 0)$, $\OML/cmm/m/it/10 H[] \OT1/cmr/m/n/10 ==
  []
 
 Missing character: There is no â in font cmr10!
 Missing character: There is no € in font cmr10!
 Missing character: There is no ™ in font cmr10!
 
-Overfull \hbox (20.30116pt too wide) in paragraph at lines 71--71
+Overfull \hbox (27.30011pt too wide) in paragraph at lines 71--71
 [] 
  []
 
-) (./ft.tex
-Underfull \hbox (badness 10000) in paragraph at lines 71--1
-\OT1/cmr/m/n/10 The de-sign cor-re-spond-ing to SQL is $((\OML/cmm/m/it/10 I \O
-MS/cmsy/m/n/10 ^^@
+[4]) (./ft.tex
+Underfull \hbox (badness 10000) in paragraph at lines 75--1
+\OT1/cmr/m/n/10 The de-sign cor-re-spond-ing to SQL is $\OMS/cmsy/m/n/10 f\OT1/
+cmr/m/n/10 (\OML/cmm/m/it/10 I \OMS/cmsy/m/n/10 ^^@
  []
 
-[4]
-Overfull \hbox (53.30165pt too wide) in paragraph at lines 20--20
+
+Overfull \hbox (38.35385pt too wide) in paragraph at lines 21--21
 [] 
  []
 
 
-LaTeX Warning: Reference `gensa' on page 5 undefined on input line 23.
+LaTeX Warning: Reference `gensa' on page 5 undefined on input line 24.
 
 
-Underfull \hbox (badness 1496) in paragraph at lines 23--24
+Underfull \hbox (badness 1496) in paragraph at lines 24--25
 \OT1/cmr/m/n/10 Let $\OML/cmm/m/it/10 [] \OT1/cmr/m/n/10 = \OML/cmm/m/it/10 $
  \OT1/cmr/m/n/10 in [] and then con-sider $[] =
  []
 
+Excluding 'comment' comment. Excluding 'comment' comment.) (./num.tex
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+)
+(./synth.tex [5]
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
+Missing character: There is no â in font cmr10!
+Missing character: There is no € in font cmr10!
+Missing character: There is no ™ in font cmr10!
 
-Overfull \hbox (90.73567pt too wide) in paragraph at lines 26--26
-[] 
- []
 
-Excluding 'comment' comment.
-Overfull \hbox (84.65726pt too wide) in paragraph at lines 38--38
-[] 
- []
+LaTeX Warning: Reference `euler' on page 6 undefined on input line 44.
 
-
-Underfull \vbox (badness 1199) has occurred while \output is active []
-
-
-Excluding 'comment' comment.) (./num.tex) (./new.tex) (./synth.tex [5])
-[6
-
-] (./speedylearn.aux)
+) [6] (./speedylearn.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -699,12 +735,12 @@ LaTeX Warning: There were multiply-defined labels.
  ) 
 Here is how much of TeX's memory you used:
  14172 strings out of 493014
- 282652 string characters out of 6133351
- 343097 words of memory out of 5000000
- 17433 multiletter control sequences out of 15000+600000
+ 282667 string characters out of 6133351
+ 341128 words of memory out of 5000000
+ 17436 multiletter control sequences out of 15000+600000
  8429 words of font info for 32 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,21n,54p,1045b,246s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 57i,21n,54p,1045b,251s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></
@@ -722,7 +758,7 @@ ve/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive
 /2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2
 016/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/20
 16/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on speedylearn.pdf (6 pages, 226263 bytes).
+Output written on speedylearn.pdf (6 pages, 231683 bytes).
 PDF statistics:
  94 PDF objects out of 1000 (max. 8388607)
  68 compressed objects within 1 object stream

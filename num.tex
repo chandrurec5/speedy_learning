@@ -1,2 +1,23 @@
 \section{Numerical Illustration}
-In this section, we compute the $H$ matrix for the various TD algorithms discussed so far and make qualitative and quantitative comments. In order to keep the discussion simple and intuitive, we compute explicit values for the most trivial MDP namely single state MDP.
+In this section, we compute the explicit design of the various TD algorithms for the following trivial MDP $M_1$. 
+\begin{example}
+Let $M_1$ be a single state MDP, $P_\pi=1,D_\pi=1$, $b_\pi=R_\pi=1$ and $\gamma=0.9$ and $J_\pi=\frac{1}{1-\gamma}=10$.
+\end{example}
+\begin{table}
+\begin{tabular}{|c|c|c|} \hline 
+Algorithms& Design& Eigen Values\\ \hline
+\tdo&(1,0.1)&0.1\\\hline
+SQL&(10,1)&1\\\hline
+GTD,GTD2&$\{\begin{bmatrix} 1 \\ 0\\\end{bmatrix},\begin{bmatrix} 1 & 0.1 \\ -0.1 & 0\\\end{bmatrix}\}$& $\frac{-1\pm\sqrt{1-4\times 0.01}}{2}$\\ 
+& & $\approx 0.98, 0.01$\\  \hline
+\end{tabular}
+\end{table}
+Notice that the GTD methods have the least Eigen value and we expect them to perform poor with respect to forgetting the initial conditions. To take a closer look at why the GTD methods are slow, consider the characteristic equation of the design matrix of the GTD algorithm given as below
+\begin{align}
+|\Lambda I-H|=\begin{bmatrix} \Lambda-I &-A_\pi \\ A_\pi^\top &0\\\end{bmatrix}=\Lambda^2-\Lambda +AA^\top=0
+\end{align}
+The design matrix $H$ has $2n$ Eigen values and given an Eigen $\mu$ of $A$, we have two Eigen values $\mu’_1$ and $\mu’_2$ given by
+\begin{align}
+\mu’_{i}=\frac{1\pm \sqrt{1-4\mu^2}}{2}, i=1,2
+\end{align}
+Thus $\mu’_1\approx 1-\mu^2$ and $\mu’_2\approx \mu^2$. In the case, of single state MDP, $\mu=0.1$ and hence $\mu’_2\approx (0.1)^2$. Since, the GTD methods square the Eigen values of $A_\pi$, performance is expected to degrade when $|\mu|<1$.

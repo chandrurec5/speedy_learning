@@ -9,20 +9,21 @@ x_{t+1}-x^*
 \end{split}
 \end{align*}
 \subsection{Conventional step-size rule}
-We now show sensitivity of the rate of convergence to the spectral properties of the design matrix in the case of conventional step size namely $\alpha_t=\frac{C}{t}$. To this end, we assume that all the Eigen values $\mu_i, i=0,\ldots,n-1$ of $H$ have positive real parts and that $\mu_0$ is an Eigen value such that $|(1-\alpha_t\mu_0)|\leq |(1-\alpha_t\mu_i)|,\forall t\geq 0, i=1,\ldots,n-1$. We now write down the expressions for the bias and the variance terms separately.
+We now show sensitivity of the rate of convergence to the spectral properties of the design matrix in the case of conventional step size namely $\alpha_t=\frac{C}{t}$. To this end, we assume that all the Eigen values $\mu_i, i=0,\ldots,n-1$ of $H$ have positive real parts and that $\mu$ is an Eigen value such that $|(1-\alpha_t\mu)|\leq |(1-\alpha_t\mu_i)|,\forall t\geq 0, i=1,\ldots,n-1$. We now write down the expression for the expected value of the squared error:
 \begin{align}
 \begin{split}
+&\E[\parallel x_t-x^*\parallel^2]=\\
 &\prod_{i=0}^t(I-\alpha_i H)(x_0-x^*)+\sum_{i=0}^t \prod_{i+1\leq k<t} (I-\alpha_{k}H)\alpha_i M_{i+1}\\
-&\leq exp^{-C\mu\sum_{i=0}^t\alpha_i}|x_0-x^*|+exp^{-2C\mu t}\sum_{k=1}^t exp(2C\mu\log k)C^2/k^2 \sigma^2\\
-&\leq exp^{-C\mu\log t}|x_0-x^*|+\exp{-2C\mu t} \frac{t^{2C\mu-2+1}}{2C\mu-2+1}C^2\sigma^2\\
-&\leq  \frac{1}{t^{C\mu}}|x_0-x^*|+\frac{1}{t}\frac{C^2}{2C\mu-1}\sigma^2\\
+&\leq e^{-2C\mu\sum_{i=0}^t\alpha_i}\parallel x_0-x^*\parallel^2+e^{-2C\mu \log t}\sum_{k=1}^t e^{2C\mu\log k}C^2/k^2 \sigma^2\\
+&\leq e^{-2C\mu\log t}\parallel x_0-x^*\parallel^2+e^{-2C\mu\log t} \frac{t^{2C\mu-2+1}}{2C\mu-2+1}C^2\sigma^2\\
+&\leq  \frac{1}{t^{2C\mu}}\parallel x_0-x^*\parallel^2+\frac{1}{t}\frac{C^2}{2C\mu-1}\sigma^2\\
 \end{split}
 \end{align}
 Notice that while the noise term reduces $O(1/t)$, the bias term vanishes only at a rate $O(1/t^{C\mu})$ and shows sensitivity to the spectral property of the design matrix.
 \subsection{Rupert-Polyak Averaging with constant step size}
 Let $\alpha_t=\alpha$ in \eqref{gensa} and then consider $\bar{x}_t=\frac{1}{t+1}\sum_{k=0}^t x_k$, we then have
 \begin{align*}
-\bar{x}_t-x^*&=\frac{1}{t+1}\big(\sum_{i=0}^t (I-\alpha H)^{t-i}(x_0-x^*)+\alpha \sum_{i=0}^t \sum_{k=0}^{t-i} (I-\alpha H)^{t-i-k} M_{i+1}\big)
+\bar{x}_t-x^*&=\frac{1}{t+1}\big(\sum_{i=0}^t (I-\alpha H)^{t-i}(x_0-x^*)\\&+\alpha \sum_{i=0}^t \sum_{k=0}^{t-i} (I-\alpha H)^{t-i-k} M_{i+1}\big)
 \end{align*}
 Let $\bar{\lambda}$ be the eigen value of $(I-\alpha H)$ with maximum modulus, then we have
 \begin{comment}
@@ -34,7 +35,9 @@ Let $\bar{\lambda}$ be the eigen value of $(I-\alpha H)$ with maximum modulus, t
 \end{align*}
 \end{comment}
 \begin{align}\label{rates}
-\E[\parallel\bar{x}_t-x^*\parallel^2]&\leq\frac{1}{(t+1)^2}\frac{1}{(1-\bar{\lambda})^2} \big(\parallel(x_0-x^*)\parallel^2+ \alpha^2\sum_{i=0}^t \E\parallel M_{i+1}\parallel^2\big)
+\begin{split}
+\E[\parallel\bar{x}_t-x^*\parallel^2]&\leq\frac{1}{(t+1)^2}\frac{1}{(1-\bar{\lambda})^2} \big(\parallel(x_0-x^*)\parallel^2\\&+ \alpha^2\sum_{i=0}^t \E\parallel M_{i+1}\parallel^2\big)
+\end{split}
 \end{align}
 \begin{comment}
 \begin{itemize}
@@ -45,6 +48,5 @@ Let $\bar{\lambda}$ be the eigen value of $(I-\alpha H)$ with maximum modulus, t
 \item Designing a desirable value of $\bar{\lambda}$ since it plays a role both in the bias as well as noise terms. 
 \end{enumerate}
 \end{itemize}
-
 \subsection{Optimal Step Size}
 \end{comment}
