@@ -1,5 +1,5 @@
 \section{Synthesis of New algorithms}
-\subsection{Stories of Failures}
+\subsection{Instances of Bad Design}
 To illustrate the usefulness of the ODE based framework, consider the following RL algorithm called SQLFA which combines SQL and function approximation for the purpose of on-policy evaluation:
 \begin{align}\label{sqlfa}
 \begin{split}
@@ -29,7 +29,7 @@ Thus if $\mu$ is a real Eigen value of $A_\pi$ and $\mu’_{1,2}$ corresponding 
 \mu’_{i}=\frac{\mu\pm\sqrt{\mu^2-4\mu}}{2}, i=1,2
 \end{align}
 Notice that for small values of $\mu$, $\mu’_i, i=1,2$ have imaginary parts and the real part is $\mu/2$. Thus this new scheme will be oscillatory (due to imaginary parts) and have poor convergence compared to \tdo since the real part gets divided by a factor of $2$.
-\subsection{Stories of Success}
+\subsection{Instances of Good Design}
 We mentioned that the linear update rule in \eqref{linearrec} is an Euler discretization of the ODE in \eqref{linearode}. However, there are different ways to discretize a given ODE and the \emph{Predictor-Corrector} discretization of the \eqref{linearode} is the following update rule
 \begin{align}
 x^m_{t}&=x_t+\alpha_t(g-Hx_t)\\
@@ -41,4 +41,14 @@ x_{t+1}&=x_t+\alpha_t(g-H(x_t+\alpha_t(g-Hx_t)))\\
 &=x_t+\alpha_t(g+\alpha_t g- H +\alpha_t H^2)x_t \\
 &= (I-\alpha_t H+\alpha_t^2 H^2)x_t+\alpha_t(g-\alpha_t H g)
 \end{align}
-Notice that the PC method is slower than the Euler discretization in \eqref{euler}.
+The above recursion corresponds to the design $\{g_4,H_4\}$, where $g_4=g-\alpha Hg$, $H_4=H-\alpha H^2$. Notice that the PC method can be slower than the Euler discretization in \eqref{linearrec}. This is due to the fact that if $\mu$ was the smallest Eigen value of $H$, then the smallest Eigen value of $H_4$ will be $\mu-\alpha \mu^2<\mu$.\par
+We now present a novel stable algorithm by modifying the PC type updates. We call this the Stable PC update rule and it is given by
+\begin{align}\label{spa}
+x^m_{t}&=x_t-\beta(g-Hx_t)\\
+x_{t+1}&=x_t+\alpha(g-Hx^m_t)
+\end{align} 
+The unfurled version of the SPC is given below:
+\begin{align}\label{}
+x_{t+1}= (I-\alpha H-\alpha\beta H^2)x_t+\alpha_t(g+\beta H g)
+\end{align}
+The design of the SPC is given by $\{g_5,H_5\}$ where $g_5=(g+\beta H g)$ and $H_5=H+\beta H^2$. Now even when all the Eigen values of $H$ do not have positive real parts, we know that Eigen values of $H^2$ are always positive and by choosing an appropriate $\beta>0$ we can ensure that all the Eigen values of $H_5$ have positive real parts.
