@@ -1,20 +1,24 @@
 \section{Temporal Difference Learning Algorithms}
-The \emph{temporal difference} (TD) class of learning algorithms solve the projected Bellman equation. The simples of the TD family namely TD($0$) is given by,
-\begin{align}\label{tdzero}
-\theta_{t+1}=\theta_t+\alpha_t(\underbrace{R(s_t,a_t)+\gamma \phi(s_{t+1})\theta_t-\phi(s_t)\theta_t}_{{\delta_t}}){\phi(s_t)}^\top,
+The \emph{temporal difference} (TD) class of learning algorithms solve the projected Bellman equation. Since in the RL setting, $b_\pi$ and $A_\pi$ are not known explicitly, the TD algorithms perform updates based on noisy observations, and are hence LSA algorithms as well. The different designs of the TD algorithms are meant to address the different issues such as stability and speed of convergence.
+While the design changes (primary/composite) across the different TD variants, a common feature amongst almost all the TD algorithms is the use of the temporal difference which is given by
+\begin{align}\label{td}
+\delta_t(\theta)=R(s_t,a_t)+\gamma \phi'_t\theta-\phi_t\theta,
 \end{align}
-where $\phi(s_t)^\top \in \R^n$ is the feature of state $s_t$ and is the $s^{th}$ row of the feature matrix $\Phi$. In \eqref{tdzero}, $\delta_t$ is the temporal difference term which is an estimate of the error in the value function specified by $\theta_t$. The $TD(0)$ update can also be re-written as
+where $\phi_t=\phi(s_t)^\top \in \R^n$ is the feature of state $s_t$ and is the $s^{th}$ row of the feature matrix $\Phi$ and in a similar way $\phi'_t=\phi(s'_t)$. Thus $\delta_t$ is the error in the current estimate of the value function.\par
+The simplest of the TD family namely TD($0$) is given by,
 \begin{align}\label{tdzero}
-\theta_{t+1}=\theta_t+\alpha_t(b_\pi-A_\pi)\theta_t+\alpha_t M_{t+1}
+\theta_{t+1}=\theta_t+\alpha_t\delta_t(\theta_t)\phi_t^\top,
 \end{align}
-where $b_\pi=\Phi^\top D_\pi R_\pi$ and $A_\pi=\Phi^\top D_\pi (I-\gamma P_\pi)\Phi$. In order to arrive at \eqref{tdzero} we have made use of the fact that $s_t\sim D_\pi, a_t\sim\pi(s_t,\cdot)$, $\mathbf{E}[\delta_t|s_t]= \big(R_\pi(s_t)+\gamma (P_\pi J_\theta)(s_t) -J_\theta(s_t)\big)$ and letting $M_{t+1}=\delta_t\phi(s_t)^\top-\mathbf{E}[\delta_t{\phi(s_t)}^\top]$.\par
-Note that the design of TD($0$) is given by $\{b_\pi,A_\pi\}$.
-\subsection{Off-policy divergence of TD($0$)}
+It is clear that $TD(0)$ is the following LSA algorithm in $n$ variables
+\begin{align}\label{tdzero}
+\theta_{t+1}=\theta_t+\alpha_t(b_\pi-A_\pi)\theta_t+\alpha_t M_{t+1},
+\end{align} 
+with design $\langle b_\pi,A_\pi \rangle$. In order to arrive at \eqref{tdzero} we have made use of the fact that $s_t\sim D_\pi, a_t\sim\pi(s_t,\cdot)$, $\mathbf{E}[\delta_t(\theta)|s_t]= \big(R_\pi(s_t)+\gamma (P_\pi J_\theta)(s_t) -J_\theta(s_t)\big)$ and letting $M_{t+1}=\delta_t\phi_t^\top-\mathbf{E}[\delta_t\phi_t^\top]$.\par
 The TD($0$) algorithm can exhibit divergent behaviour in the \emph{off-policy} setting. In the \emph{off-policy} setting the recursion in \eqref{tdzero} has to be modified as follows
 \begin{align}\label{tdzerooff}
-\theta_{t+1}=\theta_t+\alpha_t(\rho_t(s_t,a_t){R(s_t,a_t)+\gamma \phi(s_{t+1})\theta_t-\phi(s_t)\theta_t}){\phi(s_t)}^\top,
+\theta_{t+1}=\theta_t+\alpha_t\rho_t(s_t,a_t)\delta_t\phi_t^\top,
 \end{align}
-where $\rho_t\stackrel{\cdot}{=}\frac{\pi(s_t,a_t)}{\mu(s_t,a_t)}$ is the importance sampling ratio between the behaviour policy $\mu$ and target policy $\pi$. The recursion in \eqref{tdzerooff} can be re-written as
+where $\rho_t\stackrel{\cdot}{=}\rho(s_t,a_t)$ is the importance sampling ratio between the behaviour policy $\mu$ and target policy $\pi$. The recursion in \eqref{tdzerooff} can be re-written as
 \begin{align}\label{tdzerooffsa}
 \theta_{t+1}=\theta_t+\alpha_t(b_\pi-A^\mu_\pi)\theta_t+\alpha_t M_{t+1},
 \end{align}
@@ -32,23 +36,24 @@ Consider a two state MDP with $P_\pi=
 \begin{bmatrix}
     0.5       & 0  \\
     0       &0.5 \\
-\end{bmatrix}$. Then the design matrix $A^\mu_\pi=\Phi^\top(I-\gamma P_\pi)\Phi=-0.2$ is negative definite and hence from \Cref{linstab} it follows that TD($0$) is divergent for this example.
-
+\end{bmatrix}$. Then the design matrix $A^\mu_\pi=\Phi^\top(I-\gamma P_\pi)\Phi=-0.2$ is negative definite and hence from \Cref{linstab} it follows that \tdo is divergent for this example.
 \end{example}
 %\input{offpol}
 \subsection{Gradient Temporal Difference Learning}
 The instability of TD($0$) is due to the fact that it is not a true gradient descent algorithm. The first gradient-TD (GTD) algorithm was proposed in \cite{} and is based on minimizing the \emph{norm of the expected TD update} (NEU) given by
 \begin{align}\label{neu}
-NEU(\theta)=\E[\rho\phi^\top\delta(\theta)]\E[\rho\phi^\top\delta(\theta)]
+NEW(\theta)=\parallel b_\pi -A_\pi\theta\parallel^2
+=\E[\rho_t\phi_t^\top\delta_t(\theta)]^\top\E[\rho_t\phi_t^\top\delta_t(\theta)]
 \end{align}
-The GTD scheme based is on the gradient of the above expression which is given by $-\frac{1}{2}\nabla NEU(\theta)=\E[\rho (\phi-\gamma\phi’)^\top \phi]\E[\rho \phi^\top\delta(\theta)]$. Since the gradient is a product of two expectation we cannot use a sample product (due to the presence of correlations). The GTD addresses this issue by estimating $\E[\rho\delta\phi^\top]$ in a separate recursion. The GTD updates can be given by
+The GTD scheme based is on the gradient of the above expression which is given by (dropping subscript $t$ for convenience) $-\frac{1}{2}\nabla NEU(\theta)=\E[\rho (\phi-\gamma\phi')^\top \phi]\E[\rho \phi^\top\delta(\theta)]$. Since the gradient is a product of two expectation we cannot use a sample product (due to the presence of correlations). The GTD addresses this issue by estimating $\E[\rho\delta\phi^\top]$ in a separate recursion. The GTD updates can be given by
 \begin{align}
 \begin{split}
 y_{t+1}&=y_t+\alpha_t(\rho_t\phi^\top\delta_t -y_t)\\
-\theta_{t+1}&=\theta_t+\alpha_t\rho_t(\phi(s_t)-\gamma\phi(s_{t+1}))^\top\phi(s_t)y_t
+\theta_{t+1}&=\theta_t+\alpha_t\rho_t(\phi_t-\gamma\phi'_t)^\top\phi_ty_t
 \end{split}
 \end{align}
-The design of GTD is given by $\{g_1,H_1\}$ where $g_1=\begin{bmatrix}b_\pi\\ 0\\ \end{bmatrix}$, $H_1=\begin{bmatrix}-I &-\Phi^\top D_\mu (\Phi -\gamma P_\pi\Phi) \\ (\Phi -\gamma P_\pi\Phi)^\top D_\mu\Phi &0 \\ \end{bmatrix}$.\par
+Notice that $y$ updates are noisy Euler discretization of the ODE $\dot{y}=\E[\rho\delta\phi^\top]-y(t)$. The overall design of GTD is given by $\D_{GTD}=\langle \begin{bmatrix}b_\pi\\ 0\\ \end{bmatrix},\begin{bmatrix}-I &-A^\mu_\pi \\ {A^\mu_\pi}^\top &0 \\ \end{bmatrix}\rangle$.\par
+%$\{g_1,H_1\}$ where $g_1=\begin{bmatrix}b_\pi\\ 0\\ \end{bmatrix}$, $H_1=\begin{bmatrix}-I &-\Phi^\top D_\mu (\Phi -\gamma P_\pi\Phi) \\ (\Phi -\gamma P_\pi\Phi)^\top D_\mu\Phi &0 \\ \end{bmatrix}$.\par
 Instead of NEU, the \emph{mean-square projected Bellman Error} (MSPBE) can also be minimized. The MSPBE is defined as
 \begin{align}\label{mspbe}
 MSPBE(\theta)=\parallel J_\theta-\Pi T_\pi J_\theta \parallel^2_D
@@ -56,11 +61,12 @@ MSPBE(\theta)=\parallel J_\theta-\Pi T_\pi J_\theta \parallel^2_D
 The GTD2 algorithm was proposed in \cite{} based on minimizing \eqref{mspbe}. The GTD2 updates are given by
 \begin{align}
 \begin{split}
-y_{t+1}&=y_t+\beta_t\phi(s_t)^\top(\rho_t\delta_t-\phi(s_t)y_t)\\
-\theta_{t+1}&=\theta_t+\alpha_t\rho_t(\phi(s_t)-\gamma\phi(s_{t+1}))^\top\phi(s_t)y_t
+y_{t+1}&=y_t+\beta_t\phi_t^\top(\rho_t\delta_t-\phi_t y_t)\\
+\theta_{t+1}&=\theta_t+\alpha_t\rho_t(\phi_t-\gamma\phi’_t)^\top\phi_t y_t
 \end{split}
 \end{align}
-The design of GTD2 is given by $\{g_2,H_2\}$, where $g_2=(b_\pi,0)$, $H_2==\begin{bmatrix}-\Phi^\top D_\mu\Phi &-\Phi^\top D_\mu (\Phi -\gamma P_\pi\Phi) \\ (\Phi -\gamma P_\pi\Phi)^\top D_\mu\Phi &0 \\ \end{bmatrix}$
+The design of GTD2 is given by $\D_{GTD2}=\langle \begin{bmatrix}b_\pi\\ 0\\ \end{bmatrix} \begin{bmatrix}-M &-A^\mu_\pi \\ {A^\mu_\pi}^\top &0 \\ \end{bmatrix}\rangle$, where $M=\Phi^\top D_\mu\Phi$
+%$\{g_2,H_2\}$, where $g_2=(b_\pi,0)$, $H_2=\begin{bmatrix}-\Phi^\top D_\mu\Phi &-\Phi^\top D_\mu (\Phi -\gamma P_\pi\Phi) \\ (\Phi -\gamma P_\pi\Phi)^\top D_\mu\Phi &0 \\ \end{bmatrix}$
 %\subsection{Saddle Point Formulation}
 \subsection{Speedy Learning}
 Speedy Q-learning was introduced in \cite{} and uses a `speed-up’ term to achieve better convergence rates. The SQL updates for the full state representation is given by
@@ -73,4 +79,4 @@ The above scheme is the Euler discretization of the following ODE
 \begin{align}
 \dot{J_\pi}(t)=(R_\pi+\gamma P_\pi J_\pi(t) -J_\pi(t))+\gamma P_\pi\dot{J_\pi}(t)
 \end{align}
-The design corresponding to SQL is $\{(I-\gamma P_\pi)^{-1}R_\pi,I\}$.
+The design corresponding to SQL is $\langle(I-\gamma P_\pi)^{-1}R_\pi,I\rangle$.

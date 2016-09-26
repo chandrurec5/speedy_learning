@@ -19,19 +19,24 @@ where $J_\pi=(J_\pi(s),\forall s\in S)$. The BE can thus be re-written as
 J_\pi=R_\pi+\gamma P_\pi J_\pi,
 \end{align}
 where $R_\pi(s)=\sum_{a\in A}\pi(s,a) R(s,a)$ and $p_\pi(s,s’)=\sum_{a\in A}\pi(s,a)p_a(s,s’)$. Note that the BE is a linear system of equations in $|S|$ variables.\par
+Algorithms to compute the value function need to address two important issues. Firstly, in an RL setting, the model parameters are not available and only the samples are available. Secondly, the state space can be large and hence it is difficult to compute exact values for all the $|S|$ states.
+\subsection{RL setting}
+We consider a policy evaluation setting, i.e., we are interested in computing the value $J_\pi$ of the \emph{target} policy denoted by $\pi$. We assume that the samples are obtained by an observation policy $\mu$. In the \emph{on-policy} setting, $\mu=\pi$, i.e. the samples are observed using the target policy. However, in the \emph{off-policy} setting, $\mu\neq \pi$. Further, we assume that samples are available as $(s_t,s’_t),t\geq 0$, where $s_t$ are i.i.d with distribution $d_\mu$ which is the stationary distribution of the probability transition kernel $P_\mu$. Another quantity of interest is the importance sampling ratio given by $\rho(s,a)=\frac{\pi(s,a)}{\mu(s,a)}$ which specifies the ratio of performing a given action $a$ in a given state $s$ using the two different policies $\pi$ and $\mu$. 
 \subsection{Function Approximation}
-The term \emph{curse-of-dimensionality} denotes the fact that $|S|$ scales exponentially in the number of state variables. Due to the curse, MDPs in practice tend to have large number of states. Solving the linear system in \eqref{be} involves matrix inversion and requires a minimum of $O(|S|^2)$ computations, and hence it is impractical to solve the BE when $|S|$ is large. A practical way to address this issue is to approximate the value function. A widely adopted approach is function approximation, wherein the value function is approximated by a parameterized family of functions $J_\pi\approx J_\theta= \Phi(\theta^*)$, where $\{\Phi(\theta), \theta\in \R^n\}$ is the parameterized family and $\theta^*\in \R^n$ is the optimal parameter. Note that the parameter $\theta$ belongs to $\R^n$ and dimensionality reduction can be achieved by choosing $n<<|S|$. Linear parameterization is the most common, wherein, $J_\pi\approx J_\theta \Phi\theta^*$, with $\Phi$ as a $|S|\times n$ feature matrix.
+The term \emph{curse-of-dimensionality} denotes the fact that $|S|$ scales exponentially in the number of state variables. Due to the curse, MDPs in practice tend to have large number of states. Solving the linear system in \eqref{be} involves matrix inversion and requires a minimum of $O(|S|^2)$ computations, and hence it is impractical to solve the BE when $|S|$ is large. A practical way to address this issue is to approximate the value function. A widely adopted approach is function approximation, wherein the value function is approximated by a parameterized family of functions $J_\pi\approx J_\theta= \Phi(\theta^*)$, where $\{\Phi(\theta), \theta\in \R^n\}$ is the parameterized family and $\theta^*\in \R^n$ is the optimal parameter. Note that the parameter $\theta \in\R^n$ and dimensionality reduction is achieved by choosing $n<<|S|$. Linear parameterization is the most common, wherein, $J_\pi\approx J_\theta =\Phi\theta^*$, with $\Phi$ as a $|S|\times n$ feature matrix.
 \subsection{Projected Bellman Equation}
-Once $\Phi$ is fixed, we have to come up with a procedure to compute out $\theta^*$. An immediate idea is to take a cue from linear regression and look at the following quadratic loss function that quantifies the approximation error.
+Once $\Phi$ is fixed, a procedure to comput $\theta^*$ needs to be specified. An immediate idea is to take a cue from linear regression and look at the following quadratic loss function that quantifies the approximation error.
 \begin{align}
 L(\theta)=\sum_{s\in S}(J_\theta-TJ_\theta)^2.
 \end{align}
-The above penalty function is called \emph{mean-square-Bellman-error} (MSBE) and a way to compute $\theta^*$ would be to minimize the MSBE. A caveat however is that $TJ_\theta$ does not usually belong to the subspace belonging to spanned by the columns of $\Phi$. As a result, $TJ_\theta$ cannot be expressed as $\Phi \theta’$ for any $\theta’\in \R^n$. Due to this reason, none of the TD algorithms consider the MSBE as the error criterion.\par
-A way to side step the issue of non-representability of $TJ_\theta$, we can instead consider a projected Bellman equation (PBE) given by
-\begin{align}
+The above penalty function is called \emph{mean-square-Bellman-error} (MSBE) and a way to compute $\theta^*$ would be to minimize the MSBE. A caveat however is that $TJ_\theta$ does not usually belong to the subspace belonging to spanned by the columns of $\Phi$. As a result, $TJ_\theta$ cannot be expressed as $\Phi \theta’$ for any $\theta’\in \R^n$. 
+%Due to this reason, none of the TD algorithms consider the MSBE as the error criterion.\par
+A way to side step the issue of non-representability of $TJ_\theta$, is to consider the projected Bellman equation (PBE) given by
+\begin{align}\label{pbe}
 \begin{split}
-J_{\theta^*}&=\Pi T_\pi J_{\theta^*},\\
-\Phi {\theta^*}&=\Pi T_\pi \Phi{\theta^*},
+\Phi {\theta^*}&=\Pi T_\pi \Phi{\theta^*}\\
+\underbrace{\Phi^\top D_\pi (I-\gamma P_\pi)\Phi^\top}_{A_\pi} \theta^*&=\underbrace{\Phi^\top D_\pi R_\pi}_{b_\pi}.
 \end{split}
 \end{align}
-where $\Pi=\Phi(\Phi^\top D_\pi \Phi)^{-1}\Phi^\top$ is the least squares projection operator and $D_\pi$ is a diagonal matrix with the diagonal entry $D_\pi(s,s)$ as the stationary distribution of state $s$ under policy $\pi$.
+where $\Pi=\Phi(\Phi^\top D_\pi \Phi)^{-1}\Phi^\top D_\pi$ is the least squares projection operator and $D_\pi$ is a diagonal matrix with the diagonal entry $D_\pi(s,s)$ as the stationary distribution of state $s$ under policy $\pi$.\par
+Computing $\theta^*$ boils down to solving an $n\times n $ linear system of equations given by$A_\pi\theta^*=b_\pi$. Further, in an RL setting, $\theta^*$ has be computed without the explicit knowledge of $A_\pi$ and $b_\pi$.
