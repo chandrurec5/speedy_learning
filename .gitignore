@@ -8,3 +8,7 @@ speedylearn.log
 speedylearn.out
 
 speedylearn.pdf
+
+.DS_Store
+
+speedylearn.synctex.gz
