@@ -1,52 +1,23 @@
-\section{Finite Time Analysis}
+\section{Main Result}
+\begin{theorem}
+\end{theorem}
+
 We now study the finite time performance of the linear SA update in \eqref{linearrec}
 \begin{align*}
 \begin{split}
 x_{t+1}-x^*
-&=x_t+\alpha_t(g-Hx_t)+\alpha_t(M_{t+1})-H^{-1}g\\
-&=(I-\alpha_t H)(x_t-x^*)+\alpha_t M_{t+1}\\
-&=\underbrace{\prod_{i=0}^t(I-\alpha_i H)(x_0-x^*)}_{\text{Bias}}\\&+\underbrace{\sum_{i=0}^t \prod_{i+1\leq k<t} (I-\alpha_{k}H)\alpha_i M_{i+1}}_{\text{Noise}}
+&=x_t+\alpha_t(g-H_t x_t)+\alpha_t(N_{t+1})-H^{-1}g\\
+&=(I-\alpha_t H_t)(x_t-x^*)+\alpha_t N_{t+1}\\
+%&=\underbrace{\prod_{i=0}^t(I-\alpha_i H_i)(x_0-x^*)}_{\text{Bias}}\\&+\underbrace{\sum_{i=0}^t \prod_{i+1\leq k<t} (I-\alpha_{k}H)\alpha_i N_{i+1}}_{\text{Noise}}
 \end{split}
 \end{align*}
-\subsection{Conventional step-size rule}
-We now show sensitivity of the rate of convergence to the spectral properties of the design matrix in the case of conventional step size namely $\alpha_t=\frac{C}{t}$. To this end, we assume that all the Eigen values $\mu_i, i=0,\ldots,n-1$ of $H$ have positive real parts and that $\mu$ is an Eigen value such that $|(1-\alpha_t\mu)|\leq |(1-\alpha_t\mu_i)|,\forall t\geq 0, i=1,\ldots,n-1$. We now write down the expression for the expected value of the squared error:
-\begin{align}
-\begin{split}
-&\E[\parallel x_t-x^*\parallel^2]=\\
-&\prod_{i=0}^t(I-\alpha_i H)(x_0-x^*)+\sum_{i=0}^t \prod_{i+1\leq k<t} (I-\alpha_{k}H)\alpha_i M_{i+1}\\
-&\leq e^{-2C\mu\sum_{i=0}^t\alpha_i}\parallel x_0-x^*\parallel^2+e^{-2C\mu \log t}\sum_{k=1}^t e^{2C\mu\log k}C^2/k^2 \sigma^2\\
-&\leq e^{-2C\mu\log t}\parallel x_0-x^*\parallel^2+e^{-2C\mu\log t} \frac{t^{2C\mu-2+1}}{2C\mu-2+1}C^2\sigma^2\\
-&\leq  \frac{1}{t^{2C\mu}}\parallel x_0-x^*\parallel^2+\frac{1}{t}\frac{C^2}{2C\mu-1}\sigma^2\\
-\end{split}
-\end{align}
-Notice that while the noise term reduces $O(1/t)$, the bias term vanishes only at a rate $O(1/t^{C\mu})$ and shows sensitivity to the spectral property of the design matrix.
 \subsection{Rupert-Polyak Averaging with constant step size}
 Let $\alpha_t=\alpha$ in \eqref{gensa} and then consider $\bar{x}_t=\frac{1}{t+1}\sum_{k=0}^t x_k$, we then have
 \begin{align*}
-\bar{x}_t-x^*&=\frac{1}{t+1}\big(\sum_{i=0}^t (I-\alpha H)^{t-i}(x_0-x^*)\\&+\alpha \sum_{i=0}^t \sum_{k=0}^{t-i} (I-\alpha H)^{t-i-k} M_{i+1}\big)
+\bar{x}_t-x^*&=\frac{1}{t+1}\Big(\sum_{k=0}^t\prod_{i=0}^k (I-\alpha H_i) (x_0-x^*)\\&+\alpha \sum_{i=0}^t \sum_{j=i}^{t} \prod_{k=i}^j(I-\alpha H_k) N_{i+1}\Big)
 \end{align*}
-Let $\bar{\lambda}$ be the eigen value of $(I-\alpha H)$ with maximum modulus, then we have
-\begin{comment}
+Now we have 
 \begin{align*}
-\begin{split}
-|\E[\bar{x}_t-x^*]|&=|\frac{1}{t+1}\big(\sum_{i=0}^t (I-\alpha H)^{t-i}(x_0-x^*)|\\
-&\leq \frac{1}{t+1}\frac{1}{1-\bar{\lambda}}|x_0-x^*|
-\end{split}
+\E\parallel\bar{x}_t-x^*\parallel^2&=\frac{1}{t+1}\Big(\sum_{k=0}^t\prod_{i=0}^k (I-\alpha H_i) (x_0-x^*)\\&+\alpha \sum_{i=0}^t \sum_{j=i}^{t} \prod_{k=i}^j(I-\alpha H_k) N_{i+1}\Big)
 \end{align*}
-\end{comment}
-\begin{align}\label{rates}
-\begin{split}
-\E[\parallel\bar{x}_t-x^*\parallel^2]&\leq\frac{1}{(t+1)^2}\frac{1}{(1-\bar{\lambda})^2} \big(\parallel(x_0-x^*)\parallel^2\\&+ \alpha^2\sum_{i=0}^t \E\parallel M_{i+1}\parallel^2\big)
-\end{split}
-\end{align}
-\begin{comment}
-\begin{itemize}
-\item When all eigen values of $H$ have positive real parts, then for diminishing step sizes \eqref{gensa} tracks the ODE $\dot{x}(t)=(g-Hx(t))$. Suppose the eigen value of $H$ with smallest real part, say $\mu$ had no imaginary component, then it dictates the asymptotic rate of the ODE. Similarly, the modulus of the eigen value dictates the rate at which the bias is forgotten in \eqref{rates}. Further, in the case when the eigen value of $H$ with smallest real part, say $\mu$ had no imaginary component, then the rate in \eqref{rates} is then dictated by $\bar{\lambda}=(I-\alpha\mu)$. 
-\item Given that the rates with respect to time are the same for all the stochastic approximation schemes of the form \eqref{gensa}, algorithms can be designed using the following criteria:
-\begin{enumerate}
-\item Designing $H$ and $g$ so that $H^{-1}g$ is equal to the TD solution.
-\item Designing a desirable value of $\bar{\lambda}$ since it plays a role both in the bias as well as noise terms. 
-\end{enumerate}
-\end{itemize}
-\subsection{Optimal Step Size}
-\end{comment}
+

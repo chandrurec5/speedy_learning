@@ -25,14 +25,18 @@ Let $x(s),s\geq 0$ denote the solution to the ODE $\dot{x}(s)=f(x(s))$, with $x(
 \subsection{Linear SA algorithms}
 By a linear SA (LSA) algorithm with design $\D=\langle g,H\rangle$ in $n$ variables we mean the following:
 \begin{align}\label{linearrec}
-x_{t+1}=x_t+\alpha_t(g-Hx_t)+\alpha_t M_{t+1},
+x_{t+1}=x_t+\alpha_t(g-H_t x_t)+\alpha_t N_{t+1},
 \end{align}
-where $x_t\in \R^n$ are the iterates, $H\in \R^{n\times n}$ the design matrix and $g\in \R^n$ is the design vector. 
+where $x_t\in \R^n$ are the iterates, $H_t\in \R^{n\times n}$ are i.i.d matrices with $\E[H_t]=H$ (the design matrix), $g\in \R^n$ is the design vector and $N_{t+1}$ are martingale difference term such that $\E[\parallel N_{t+1} \parallel^2]\leq \sigma^2$ for some $\sigma\in \R^+$. Note that the LSA in \eqref{linearrec} can be re-written as 
+\begin{align}\label{linearrecadd}
+x_{t+1}=x_t+\alpha_t(g-H x_t)+\alpha_t M_{t+1},
+\end{align}
+where $M_{t+1}=N_{t+1}+(H-H_t)x_t$. It is easy to check that when all the entries of $H_t$ are bounded, condition~\ref{mart} of \Cref{saassump} holds for $M_{t+1}$ in \eqref{linearrecadd}.
 In the next section, we will show that several TD algorithm are SA algorithm with different designs. 
 It is trivial to check (and ensure) that conditions \ref{lip}-\ref{bdd} of \Cref{saassump} hold for linear SA algorithm. The convergence result for linear SA algorithms can be stated as 
 a direct consequence of \Cref{saassump}~\ref{stab} and \Cref{sat}.
 \begin{corollary}\label{linstab}
-The iterates $x_t\in \R^n$ in the linear stochastic update rule in \eqref{linearrec} converge $x^*=H^{-1}g$ as $t\ra\infty $iff all the Eigen values of $H$ have positive real parts.
+The iterates $x_t\in \R^n$ in the linear stochastic update rule in \eqref{linearrec} converge $x^*=H^{-1}g$ as $t\ra\infty $iff $H$ is positive definite.
 \end{corollary}
 We denote the spectrum of design matrix by $\{\mu_i,i=1,\ldots,n\}$.
 \subsection{Insights on Forgetting Bias}
@@ -42,11 +46,6 @@ x(s)=\sum_{i=1}^n \zeta_i e^{-\mu_i s},
 \end{align}
 where $\zeta=(\zeta_i,i=1,\ldots,n)\in \R^n$ are real coefficients. The time $s\geq 0$ in \eqref{oderate} is \emph{real} time and the time corresponding to the $t^{th}$ iterate of the algorithm is roughly $s(t)\approx\sum_{0\leq k<t}\alpha_t$. It is easy to see from \eqref{oderate} that the rate of forgetting initial conditions depends on the Eigen values values and the accumulation of algorithm time. For instance, if the step-size are chosen to be $\alpha_t=C/t$, then \begin{align}\label{biasforget}e^{-\mu_i\sum_{0\leq k<t}\alpha_t}\approx e^{-\mu_i Clog s}=O(1/s^{\mu_i C})\end{align}
 It is clear that the forgetting the initial condition depends both on the step-sizes which dictates accumulation of time i.e., $\sum_{0\leq k<t}\alpha_t$ and the condition number of the design matrix. 
-\subsection{Composite Design}
-An LSA with design $\D'=\langle g',H' \rangle$ in $m$ variables is said to be of composite design of a primary LSA with $\D=\langle g,H\rangle$ in $n$ variables ($m\geq n$) if $\D'=\langle g'=\psi_v(g),H'=\psi_M(H)\rangle$, where $\psi_v\colon \R^n\ra\R^m$ and $\psi_M\colon \R^n\ra\R^m$ are continuous functions. The following result relates the spectrum of the composite matrix $H'$ is of interest and is related to the spectrum of the primary design matrix $H$.
-\begin{lemma}
-Let $det(\lambda \I-H')=\chi(\lambda,H)$, for some $\chi\colon \R^{m\times m}\ra \R$ and  let $\mu$ be an Eigen value of $H$. Then solutions to $\chi(\lambda,\mu)=0$ are Eigen values of $H'$.
-\end{lemma}
 \subsection{Noisy Discretization Schemes}
 The idea of using ODEs is not restricted to just analysis, and can extend to synthesis, i.e., new SA algorithms can be obtained as noisy discretization of ODEs (which converges to the desired solution). Discretization is a common theme in numerical solution methods to solve ODEs, and of particular interest are the Euler discretization and the \emph{predictor-corrector} discretization schemes. Given an ODE $\dot{x}(t)=(g-Hx(t))$, the noisy Euler discretization is given in \eqref{linearrec} and the noisy PC discretization is given by
 \begin{align}\label{PC}
