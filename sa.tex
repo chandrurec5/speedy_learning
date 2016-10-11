@@ -22,24 +22,11 @@ The formal result in SA theory (please see \cite{SA} for more details) under \Cr
 \begin{theorem}\label{sat}
 Let $x(s),s\geq 0$ denote the solution to the ODE $\dot{x}(s)=f(x(s))$, with $x(0)=x_0$ and let $s(t)\sum_{0\leq k< t}\alpha_k$. Under the above assumptions we have iterates $x_t\ra x(s(t))$ as $t\ra\infty$ and $x_t\ra x^*$.
 \end{theorem}
-\subsection{Linear SA algorithms}
-By a linear SA (LSA) algorithm with design $\D=\langle g,H\rangle$ in $n$ variables we mean the following:
-\begin{align}\label{linearrec}
-x_{t+1}=x_t+\alpha_t(g-H_t x_t)+\alpha_t N_{t+1},
-\end{align}
-where $x_t\in \R^n$ are the iterates, $H_t\in \R^{n\times n}$ are i.i.d matrices with $\E[H_t]=H$ (the design matrix), $g\in \R^n$ is the design vector and $N_{t+1}$ are martingale difference term such that $\E[\parallel N_{t+1} \parallel^2]\leq \sigma^2$ for some $\sigma\in \R^+$. Note that the LSA in \eqref{linearrec} can be re-written as 
-\begin{align}\label{linearrecadd}
-x_{t+1}=x_t+\alpha_t(g-H x_t)+\alpha_t M_{t+1},
-\end{align}
-where $M_{t+1}=N_{t+1}+(H-H_t)x_t$. It is easy to check that when all the entries of $H_t$ are bounded, condition~\ref{mart} of \Cref{saassump} holds for $M_{t+1}$ in \eqref{linearrecadd}.
-In the next section, we will show that several TD algorithm are SA algorithm with different designs. 
-It is trivial to check (and ensure) that conditions \ref{lip}-\ref{bdd} of \Cref{saassump} hold for linear SA algorithm. The convergence result for linear SA algorithms can be stated as 
-a direct consequence of \Cref{saassump}~\ref{stab} and \Cref{sat}.
 \begin{corollary}\label{linstab}
 The iterates $x_t\in \R^n$ in the linear stochastic update rule in \eqref{linearrec} converge $x^*=H^{-1}g$ as $t\ra\infty $iff $H$ is positive definite.
 \end{corollary}
 We denote the spectrum of design matrix by $\{\mu_i,i=1,\ldots,n\}$.
-\subsection{Insights on Forgetting Bias}
+\subsection{Insights on Forgetting Bias}\label{initial}
 The SA theory via the ODE analysis throws light on the rate at which the initial bias (i.e., $x_0$) is forgotten. It is know from standard results in linear system theory that the trajectory $x(s),s\geq 0$ of the ODE $\dot{x}(s)=(g-Hx(s))$ is given by
 \begin{align}\label{oderate}
 x(s)=\sum_{i=1}^n \zeta_i e^{-\mu_i s}, 

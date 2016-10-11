@@ -9,16 +9,9 @@ The assumptions on the variables in \eqref{linearrec} are as under
 \vspace{-20pt}
 \begin{enumerate}[leftmargin=*]
 \item $x_t\in \R^n$ are the iterates and $\alpha_t\geq 0 ,\forall t\geq 0$ are the step-sizes.
-\item\label{pd} $H_t\in \R^{n\times n}$ are i.i.d matrices with $\E[H_t]=H$, where $H$ is a positive definite design matrix.
+\item\label{pd} $H_t\in \R^{n\times n}$ are i.i.d matrices with $\E[H_t]=H$, where $H$ is a real positive definite design matrix.
 \item $g\in \R^n$ is the design vector.
 \item $N_{t+1}$ are martingale difference term such that $\E[\parallel N_{t+1} \parallel^2]\leq \sigma^2$ for some variance $\sigma\in \R^+$.
 \end{enumerate}
 \end{assumption}
-Using results of theory of SA algorithms if follows that the iterates of \eqref{linearrec} converge i.e., $x_n\ra x^*=H^{-1}g$. In this paper, we like to understand the finite time performance of the LSA algorithms by deriving bounds $\E[\parallel x_n-x^*\parallel^2]$. The bound involves two terms namely the \emph{bias} term due to the initial condition $x_0$ and the variance term due to the noise term.
-\begin{comment}
-Note that the LSA in \eqref{linearrec} can be re-written as 
-\begin{align}\label{linearrecadd}
-x_{t+1}=x_t+\alpha_t(g-H x_t)+\alpha_t M_{t+1},
-\end{align}
-where $M_{t+1}=N_{t+1}+(H-H_t)x_t$. It is easy to check that when all the entries of $H_t$ are bounded, condition~\ref{mart} of \Cref{saassump} holds for $M_{t+1}$ in \eqref{linearrecadd}.
-\end{comment}
+Using results of theory of SA algorithms if follows that the iterates of \eqref{linearrec} converge i.e., $x_n\ra x^*=H^{-1}g$. In this paper, we like to understand the finite time performance of the LSA algorithms by deriving bounds $\E[\parallel x_n-x^*\parallel^2]$. The bound involves two terms namely the \emph{bias} term due to the initial condition $x_0$ and the variance term due to the noise term. In what follows we make use of the notation $g_{\D}$ and $H_{\D}$ respectivelyy to denote the design vector and matrix of LSA algorithm with design $\D$.

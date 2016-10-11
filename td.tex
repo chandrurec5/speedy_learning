@@ -7,7 +7,7 @@ While the design changes (primary/composite) across the different TD variants, a
 where $\phi_t=\phi(s_t)^\top \in \R^n$ is the feature of state $s_t$ and is the $s^{th}$ row of the feature matrix $\Phi$ and in a similar way $\phi'_t=\phi(s'_t)$. Thus $\delta_t$ is the error in the current estimate of the value function.\par
 The simplest of the TD family namely TD($0$) is given by,
 \begin{align}\label{tdzero}
-\theta_{t+1}=\theta_t+\alpha_t\delta_t(\theta_t)\phi_t^\top,
+&\textbf{\tdo:}&\theta_{t+1}=\theta_t+\alpha_t\delta_t(\theta_t)\phi_t^\top,
 \end{align}
 It is clear that $TD(0)$ is the following LSA algorithm in $n$ variables
 \begin{align}\label{tdzero}
@@ -23,7 +23,7 @@ where $\rho_t\stackrel{\cdot}{=}\rho(s_t,a_t)$ is the importance sampling ratio 
 \theta_{t+1}=\theta_t+\alpha_t(b_\pi-A^\mu_\pi)\theta_t+\alpha_t M_{t+1},
 \end{align}
 where $A^{\mu}_\pi=\Phi^\top D_\mu (I-\gamma P_\pi)\Phi$ , where $\mu$ is the behaviour policy used to sample the data. Thus the design of \tdo can in the off-policy case is $\{b_\pi,A^\mu_\pi\}$.
-The undoing of $TD(0)$ in the off-policy is due to the fact that all the eigen values of $A^\mu_\pi$ cannot be guaranteed to have positive real parts. This condition can be demonstrated via the following simple example from \cite{}.
+The undoing of $TD(0)$ in the off-policy is due to the fact $A^\mu_\pi$ cannot be guaranteed to be positive definite. This condition can be demonstrated via the following simple example from \cite{}.
 \begin{example}
 Consider a two state MDP with $P_\pi=
 \begin{bmatrix}
@@ -48,7 +48,7 @@ NEW(\theta)=\parallel b_\pi -A_\pi\theta\parallel^2
 The GTD scheme based is on the gradient of the above expression which is given by (dropping subscript $t$ for convenience) $-\frac{1}{2}\nabla NEU(\theta)=\E[\rho (\phi-\gamma\phi')^\top \phi]\E[\rho \phi^\top\delta(\theta)]$. Since the gradient is a product of two expectation we cannot use a sample product (due to the presence of correlations). The GTD addresses this issue by estimating $\E[\rho\delta\phi^\top]$ in a separate recursion. The GTD updates can be given by
 \begin{align}
 \begin{split}
-y_{t+1}&=y_t+\alpha_t(\rho_t\phi^\top\delta_t -y_t)\\
+\textbf{GTD:\quad}y_{t+1}&=y_t+\alpha_t(\rho_t\phi^\top\delta_t -y_t)\\
 \theta_{t+1}&=\theta_t+\alpha_t\rho_t(\phi_t-\gamma\phi'_t)^\top\phi_ty_t
 \end{split}
 \end{align}
@@ -61,22 +61,54 @@ MSPBE(\theta)=\parallel J_\theta-\Pi T_\pi J_\theta \parallel^2_D
 The GTD2 algorithm was proposed in \cite{} based on minimizing \eqref{mspbe}. The GTD2 updates are given by
 \begin{align}
 \begin{split}
-y_{t+1}&=y_t+\beta_t\phi_t^\top(\rho_t\delta_t-\phi_t y_t)\\
+\textbf{GTD2:\quad}y_{t+1}&=y_t+\beta_t\phi_t^\top(\rho_t\delta_t-\phi_t y_t)\\
 \theta_{t+1}&=\theta_t+\alpha_t\rho_t(\phi_t-\gamma\phi’_t)^\top\phi_t y_t
 \end{split}
 \end{align}
-The design of GTD2 is given by $\D_{GTD2}=\langle \begin{bmatrix}b_\pi\\ 0\\ \end{bmatrix} \begin{bmatrix}-M &-A^\mu_\pi \\ {A^\mu_\pi}^\top &0 \\ \end{bmatrix}\rangle$, where $M=\Phi^\top D_\mu\Phi$
-%$\{g_2,H_2\}$, where $g_2=(b_\pi,0)$, $H_2=\begin{bmatrix}-\Phi^\top D_\mu\Phi &-\Phi^\top D_\mu (\Phi -\gamma P_\pi\Phi) \\ (\Phi -\gamma P_\pi\Phi)^\top D_\mu\Phi &0 \\ \end{bmatrix}$
-%\subsection{Saddle Point Formulation}
-\subsection{Speedy Learning}
-Speedy Q-learning was introduced in \cite{} and uses a `speed-up’ term to achieve better convergence rates. The SQL updates for the full state representation is given by
-\begin{align}\label{sql}
+The design of GTD2 is given by $\D_{GTD2}=\langle \begin{bmatrix}b_\pi\\ 0\\ \end{bmatrix}, \begin{bmatrix}-M &-A^\mu_\pi \\ {A^\mu_\pi}^\top &0 \\ \end{bmatrix}\rangle$, where $M=\Phi^\top D_\mu\Phi$.\par
+The GTD-\emph{Mirror Prox}(GTD-MP) algorithm is given by the following update rule:
+\begin{align}\label{gtdmp}
 \begin{split}
-J_{t+1}(s)=J_t(s)+\alpha_t\big(R(s_t,a_t)+\gamma J_{t-1}(s_{t+1})-J_{t}(s_t) \big)+\\(1-\alpha_t)\big((R(s_t,a_t)+\gamma J_t(s_{t+1}))-(R(s_t,a_t)+\gamma J_{t-1}(s_{t+1}))\big)
+\textbf{GTD-MP:} y_t^m=y_t+\alpha_t{\phi_t}^\top(R(s_t,a_t)+\gamma (\phi'_t-\phi_t)\theta_t),\\ \theta_t^m=\theta_t+\alpha_t({\phi_t}-\gamma\phi'_t )^\top\phi_ty_t,\\
+ y_{t+1}=y_t+\alpha_t{\phi_t}^\top(R(s_t,a_t)+\gamma(\phi'_t-\phi_t)\theta^m_t), \\ \theta_{t+1}=\theta_t+\alpha_t({\phi_t}-\gamma\phi'_t )^\top\phi_ty^m_t,
 \end{split}
 \end{align}
-The above scheme is the Euler discretization of the following ODE
-\begin{align}
-\dot{J_\pi}(t)=(R_\pi+\gamma P_\pi J_\pi(t) -J_\pi(t))+\gamma P_\pi\dot{J_\pi}(t)
+The GTD-MP algorithm in \eqref{gtdmp} is the PC discretization of the GTD algorithm with the design matrix as $\D_{GTD-MP}=\langle (I-\alpha_t H_{GTD})g_{GTD}, H_{GTD}-\alpha_t H^2_{GTD}\rangle$. In a similar fashion, one can derive the GTD2-MP algorithm as the PC discretization of GTD2 algorithm.\par
+\begin{comment}
+\subsection{Speedy Learning}
+Speedy Q-learning was introduced in \cite{} and uses a `speed-up' term to achieve better convergence rates. The SQL updates for the full state representation is given by
+\begin{align}\label{sql}
+\begin{split}
+&\textbf{SQL:\quad}\delta_t=R(s_t,a_t)+\gamma J_{t-1}(s_{t+1})-J_{t}(s_t),\\
+&\Delta_t= \big((R(s_t,a_t)+\gamma J_t(s_{t+1}))-(R(s_t,a_t)+\gamma J_{t-1}(s_{t+1}))\big)\\&J_{t+1}(s)=J_t(s)+\alpha_t\delta_t+(1-\alpha_t)\Delta_t
+\end{split}
 \end{align}
-The design corresponding to SQL is $\langle(I-\gamma P_\pi)^{-1}R_\pi,I\rangle$.
+Note that a speed-term $\Delta_t$ is added to the temporal difference term $\delta_t$. Also, the step size accompanying the speed up term is `aggressive’ in that it is $(1-\alpha_t)\approx 1$ for small $\alpha_t$. The ODE associated with SQL is given by
+\begin{align}
+\begin{split}
+\dot{J_\pi}(t)=(R_\pi+\gamma P_\pi J_\pi(t) -J_\pi(t))+\gamma P_\pi\dot{J_\pi}(t)
+\dot{J_\pi}(t)=(I-\gamma P_\pi)^{-1}R_\pi-J_\pi(t))
+\end{split}
+\end{align}
+The design corresponding to SQL is $\D_{SQL}=\langle(I-\gamma P_\pi)^{-1}R_\pi,I\rangle$.
+\subsection{Synthesis of New algorithms}
+Consider the following RL algorithm called SQLFA which combines SQL and function approximation for the purpose of on-policy evaluation:
+\begin{align}\label{sqlfa}
+\begin{split}
+&\textbf{SQLFA:\quad}\theta_{t+1}=\theta_t+\phi(s_t)^\top \alpha_t\big(R(s_t,a_t)+\gamma \phi(s_{t+1})\theta_{t-1}\\&-\phi(s_t)\theta_t +(1-\alpha_t)(\gamma \phi(s_{t+1})\theta_t-\gamma \phi(s_{t+1})\theta_{t-1}\big)
+\end{split}
+\end{align}
+The ODE corresponding to SQLFA is given by
+\begin{align}
+\begin{split}
+&\dot{\theta}(t)=(b_\pi-A_\pi\theta_t)+\gamma\Phi^\top D_\pi P_\pi\Phi^\top\dot{\theta}(t)\\
+&\dot{\theta}(t)=(I-\gamma\Phi^\top D_\pi P_\pi\Phi)^{-1}(b_\pi-A_\pi\theta_t)
+\end{split}
+\end{align}
+\begin{align}
+\begin{split}
+\theta_t&=\theta_t+\alpha_t(y_t-\phi(s_t)^\top(\phi(s_t)\theta_t-\gamma \phi(s_{t+1})\theta_t))\\
+y_{t+1}&=y_{t}+\alpha_t(\delta_t)
+\end{split}
+\end{align}
+\end{comment}

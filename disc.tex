@@ -1,0 +1,65 @@
+\section{Spectra and Convergence}
+The constant term in \Cref{bndthm} depends on $\rho_\alpha$, which in turn depends on the spectral properties of the design matrix $H$. In particular, when $H$ is symmetric and positive definite, $\rho_{\alpha}$ depends on the smallest Eigen value of $H$. The effect of the Eigen values of $H$ on forgetting the bias was discusses in \Cref{initial}. Thus it is possible to make qualitative comments about the performance of the algorithm by looking at the spectrum of the design matrix. For instance, consider the design matrix corresponding to the following trivial MDP $\M_1$. 
+\begin{example}
+Let $M_1$ be a single state MDP, $P_\pi=1,D_\pi=1$, $b_\pi=R_\pi=1$ and $\gamma=0.9$ and $J_\pi=\frac{1}{1-\gamma}=10$.
+\end{example}
+\FloatBarrier
+\begin{table}[h]
+\begin{tabular}{|c|c|c|} \hline 
+Algorithms& Design& Eigen Values\\ \hline
+\tdo&(1,0.1)&0.1\\\hline
+%SQL&(10,1)&1\\\hline
+GTD,GTD2&$\{\begin{bmatrix} 1 \\ 0\\\end{bmatrix},\begin{bmatrix} 1 & 0.1 \\ -0.1 & 0\\\end{bmatrix}\}$& $\frac{-1\pm\sqrt{1-4\times 0.01}}{2}$\\ 
+& & $\approx 0.98, 0.01$\\  \hline
+\end{tabular}
+\end{table}
+Notice that the GTD methods have the least Eigen value and we expect them to perform poor with respect to forgetting the initial conditions. To take a closer look at why the GTD methods are slow, consider the characteristic equation of the design matrix of the GTD algorithm given as below
+\begin{align}
+|\Lambda I-H|=\begin{bmatrix} \Lambda-I &-A_\pi \\ A_\pi^\top &0\\\end{bmatrix}=\Lambda^2-\Lambda +AA^\top=0
+\end{align}
+The design matrix $H$ has $2n$ Eigen values and given an Eigen $\mu$ of $A$, we have two Eigen values $\mu'_1$ and $\mu'_2$ of $H$ given by
+\begin{align}
+\mu'_{i}=\frac{1\pm \sqrt{1-4\mu^2}}{2}, i=1,2
+\end{align}
+Thus $\mu'_1\approx 1-\mu^2$ and $\mu'_2\approx \mu^2$. In the case of $\M_1$, $\mu=0.1$ and $\mu’_2\approx (0.1)^2$. Since the GTD algorithms involving squaring of the eigen values of $A_\pi$, they are always stable since the design matrix of GTD is positive definite \cite{gtdref}. However, the squaring also reduces the rate of convergence when when the smaller Eigen value of $A_\pi$ is less than $1$.\par
+We now look at the speedy Q-learning (SQL) algorithm, and understand the spectral properties. Speedy Q-learning was introduced in \cite{} and uses a `speed-up' term to achieve better convergence rates. The SQL updates for the full state representation is given by
+\begin{align}\label{sql}
+\begin{split}
+&\textbf{SQL:\quad}\delta_t=R(s_t,a_t)+\gamma J_{t-1}(s_{t+1})-J_{t}(s_t),\\
+&\Delta_t= \big((R(s_t,a_t)+\gamma J_t(s_{t+1}))-(R(s_t,a_t)+\gamma J_{t-1}(s_{t+1}))\big)\\&J_{t+1}(s)=J_t(s)+\alpha_t\delta_t+(1-\alpha_t)\Delta_t
+\end{split}
+\end{align}
+Note that a speed-term $\Delta_t$ is added to the temporal difference term $\delta_t$. Also, the step size accompanying the speed up term is `aggressive’ in that it is $(1-\alpha_t)\approx 1$ for small $\alpha_t$. The ODE associated with SQL is given by
+\begin{align}
+\begin{split}
+\dot{J_\pi}(t)=(R_\pi+\gamma P_\pi J_\pi(t) -J_\pi(t))+\gamma P_\pi\dot{J_\pi}(t)\\
+\dot{J_\pi}(t)=\underbrace{(I-\gamma P_\pi)^{-1}R_\pi}_{\text{g}}-\underbrace{J_\pi(t))}_{HJ(t)}
+\end{split}
+\end{align}
+We hasten to add that the SQL in \eqref{sql} cannot be written in the form of \eqref{lsa} due to the presence of the speed-up term.\par 
+The ODE in \eqref{sqlode} reveals the fact $H=-I$ for SQL, and effectively speed-up term changes the conditioning of the system. Nevertheless, the speed-up term does not affect the conditioning in a desirable manner when function approximation is used. In order to see this, consider the following RL algorithm called SQLFA which combines SQL and function approximation for the purpose of on-policy evaluation:
+\begin{align}\label{sqlfa}
+\begin{split}
+&\textbf{SQLFA:\quad}\theta_{t+1}=\theta_t+\phi(s_t)^\top \alpha_t\big(R(s_t,a_t)+\gamma \phi(s_{t+1})\theta_{t-1}\\&-\phi(s_t)\theta_t +(1-\alpha_t)(\gamma \phi(s_{t+1})\theta_t-\gamma \phi(s_{t+1})\theta_{t-1}\big)
+\end{split}
+\end{align}
+The ODE corresponding to SQLFA is given by
+\begin{align}
+\begin{split}
+&\dot{\theta}(t)=(b_\pi-A_\pi\theta_t)+\gamma\Phi^\top D_\pi P_\pi\Phi^\top\dot{\theta}(t)\\
+&\dot{\theta}(t)=(I-\gamma\Phi^\top D_\pi P_\pi\Phi)^{-1}(b_\pi-A_\pi\theta_t)
+\end{split}
+\end{align}
+Note that $(I-\gamma\Phi^\top D_\pi P_\pi\Phi)^{-1}A_\pi\neq I$ and hence the speed-up term does not successfully condition the linear system in the presence of function approximation.\par
+
+\begin{comment}
+The design corresponding to the above is given by $g_3=\begin{bmatrix}0\\ b_\pi\end{bmatrix}$, and $H_3=\begin{bmatrix} -A_\pi & I \\ -A_\pi & 0\end{bmatrix}$. The Eigen values of this design can be found by solving the following equations
+\begin{align}
+|\Lambda I-H|=\begin{bmatrix} \Lambda+A_\pi & -I \\ A_\pi & \Lambda\end{bmatrix}=(\Lambda+A_\pi)\Lambda+A_\pi=0
+\end{align}
+Thus if $\mu$ is a real Eigen value of $A_\pi$ and $\mu’_{1,2}$ corresponding Eigen values of $H_3$, we have the relation
+\begin{align}
+\mu’_{i}=\frac{\mu\pm\sqrt{\mu^2-4\mu}}{2}, i=1,2
+\end{align}
+Notice that for small values of $\mu$, $\mu’_i, i=1,2$ have imaginary parts and the real part is $\mu/2$. Thus this new scheme will be oscillatory (due to imaginary parts) and have poor convergence compared to \tdo since the real part gets divided by a factor of $2$.
+\end{comment}

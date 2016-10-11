@@ -1,23 +1,38 @@
 \section{Main Result}
+\begin{lemma}
+For $H_t, H$ as in condition~\ref{pd} of \Cref{lsaassump}, there exists a $\alpha_{\max}>0$ such that $(H^\top+H)-\alpha (\E[H_t^\top H_t])\geq 0, \forall 0< \alpha<\alpha_{\max}$ 
+\end{lemma}
+\begin{proof}
+The proof is complete by noting that $H^\top+H$ and $\E[H^\top_t+H]$ are real symmetric positive definite matrices.
+\end{proof}
+Let $0<\alpha<\alpha_{\max}$, then $\rho_{\alpha}\eqdef\parallel I-\alpha(H^\top+H)+\E[H^\top_t H_t]\parallel$ (where $\parallel\cdot\parallel$ is the spectral norm).
 \begin{theorem}
+Let $\bar{x}_t=\frac{1}{t}\sum_{i=0}^{t-1} x_t$ be the Rupert-Polyak average of the iterates of LSA algorithm in \eqref{las}. Then for $0<\alpha< \alpha_{\max}$, we have
+\begin{align}
+\E[\bar{x}_t-x^*]\leq \Big(\frac{2}{(1-\rho_{\alpha})t}\Big)^2\parallel x_0-x^*\parallel^2+ \Big(\frac{1}{(1-\rho_{\alpha})t}\Big)\alpha^2\sigma^2
+\end{align}
 \end{theorem}
+\begin{proof}
+Let for $t> k $, $F_{t,k}=\prod_{i=k}^t(I-\alpha_i H_i)$ and for $t\leq k$, $F_{t,k}=I$. Further, we have ${x}_t-x^*=F_{t,i} (x_i-x_0)+\sum_{k=i}^{t}\alpha_i F_{t,k+1}N_{i+1}$
+\begin{align*}
+&\E\parallel\bar{x}_t-x^*\parallel^2=\E\parallel\frac{1}{t}\sum_{i=0}^{t-1} (x_i-x^*)\parallel^2\\
+&=\frac{1}{t^2}\E\sum_{i=0}^{t-1} \sum_{j=0}^{t-1}(x_i-x^*)^\top(x_j-x^*)\\
+%&=\frac{1}{t^2}\E\sum_{i=0}^{t-1}\big((x_i-x^*)F^\top_{i,0} F_{i,0}(x_i-x^*)\\&+ \sum_{j=i+1}^{t-1}(x_i-x^*)^\top F^\top_{j,i}F^\top_{j,i} (x_i-x^*)\\&+ \sum_{j=0}^{i-1}(x_0-x^*)^\top F^\top_{j,0}F^%\top_{j,0} (x_0-x^*)\big)\\
+&=\textbf{Bias}+\textbf{Variance}
+\end{align*}
+Let $z^*\eqdef x^*, z_0\eqdef x_0$, and $z_t-z^*\eqdef F_{t,0}(x_0-x^*)$, then we have
+\begin{align*}
+&\textbf{Bias}=\frac{1}{t^2}[\sum_{i=0}^{t-1}\E[(z_i-z^*) (z_i-z^*)]\\&+2\sum_{i=0}^{t-1}\sum_{j=i+1}^{t-1}(z_i-z^*)^\top F_{j,i+1} (z_i-z^*)]\\
+&\leq \frac{1}{t^2}[\sum_{i=0}^{t-1}\E[2(z_i-z^*)(z_i-z^*)]\\&+2\sum_{i=0}^{t-1}\sum_{j=i+1}^{t-1}(z_i-z^*)^\top \rho_\alpha^{j-i} (z_i-z^*)]\\
+&\leq \frac{1}{t^2}[\sum_{i=0}^{t-1}\E[\frac{2}{1-\rho_\alpha}(z_i-z^*)(z_i-z^*)]\\
+&=\frac{1}{t^2}[\sum_{i=0}^{t-1}\E[\frac{2}{1-\rho_\alpha}(z_0-z^*)F^\top_{i,0}F_{i,0}(z_0-z^*)]\\
+&\leq \frac{2}{(1-\rho_{\alpha})t^2}\frac{1}{1-\rho_\alpha}\E(z_0-x^*)\rho_\alpha^i(z_0-x^*)]\\
+\end{align*}
+\begin{align*}
+&\textbf{Variance}=\frac{1}{t^2}\E[\sum_{i=0}^{t-1}\sum_{j=i}^{t-1} \alpha^2 N^\top_{i+1}F^\top_{j,i} F_{j,i} N_{i+1}]\\
+&\leq \frac{1}{t^2}\E[\sum_{i=0}^{t-1}N_{i+1}^\top N_{i+1}\sum_{j=i}^{t-1} \alpha^2 \rho_{\alpha}^2]\\
+&\leq \frac{\alpha^2}{t^2}[\sum_{i=0}^{t-1}\sigma^2 \frac{1}{1-\rho_{\alpha}}]\\
+&\leq \frac{\alpha^2\sigma^2}{(1-\rho_\alpha)t}
+\end{align*}
 
-We now study the finite time performance of the linear SA update in \eqref{linearrec}
-\begin{align*}
-\begin{split}
-x_{t+1}-x^*
-&=x_t+\alpha_t(g-H_t x_t)+\alpha_t(N_{t+1})-H^{-1}g\\
-&=(I-\alpha_t H_t)(x_t-x^*)+\alpha_t N_{t+1}\\
-%&=\underbrace{\prod_{i=0}^t(I-\alpha_i H_i)(x_0-x^*)}_{\text{Bias}}\\&+\underbrace{\sum_{i=0}^t \prod_{i+1\leq k<t} (I-\alpha_{k}H)\alpha_i N_{i+1}}_{\text{Noise}}
-\end{split}
-\end{align*}
-\subsection{Rupert-Polyak Averaging with constant step size}
-Let $\alpha_t=\alpha$ in \eqref{gensa} and then consider $\bar{x}_t=\frac{1}{t+1}\sum_{k=0}^t x_k$, we then have
-\begin{align*}
-\bar{x}_t-x^*&=\frac{1}{t+1}\Big(\sum_{k=0}^t\prod_{i=0}^k (I-\alpha H_i) (x_0-x^*)\\&+\alpha \sum_{i=0}^t \sum_{j=i}^{t} \prod_{k=i}^j(I-\alpha H_k) N_{i+1}\Big)
-\end{align*}
-Now we have 
-\begin{align*}
-\E\parallel\bar{x}_t-x^*\parallel^2&=\frac{1}{t+1}\Big(\sum_{k=0}^t\prod_{i=0}^k (I-\alpha H_i) (x_0-x^*)\\&+\alpha \sum_{i=0}^t \sum_{j=i}^{t} \prod_{k=i}^j(I-\alpha H_k) N_{i+1}\Big)
-\end{align*}
-
+\end{proof}
