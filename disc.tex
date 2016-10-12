@@ -19,9 +19,10 @@ The design matrix $H$ has $2n$ Eigen values and given an Eigen $\mu$ of $A$, we 
 \mu'_{i}=\frac{1\pm \sqrt{1-4\mu^2}}{2}, i=1,2
 \end{align}
 Thus $\mu'_1\approx 1-\mu^2$ and $\mu'_2\approx \mu^2$. In the case of $\M_1$, $\mu=0.1$ and $\mu’_2\approx (0.1)^2$. Since the GTD algorithms involving squaring of the eigen values of $A_\pi$, they are always stable since the design matrix of GTD is positive definite \cite{gtdref}. However, the squaring also reduces the rate of convergence when when the smaller Eigen value of $A_\pi$ is less than $1$.
-
-
+\input{gtdslow}
 \subsection{Design of Update Equations}
+\input{gtdosci}
+\input{sqlslow}
 We now look at the speedy Q-learning (SQL) algorithm, and understand the spectral properties. Speedy Q-learning was introduced in \cite{} and uses a `speed-up' term to achieve better convergence rates. The SQL updates for the full state representation is given by
 \begin{align}\label{sql}
 \begin{split}

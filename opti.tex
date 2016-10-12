@@ -8,7 +8,7 @@ Let $\mathcal{H}=(H_t), t\geq 0$ be a stationary process of $n\times n$ real-val
 \end{theorem}
 In the case when the implicit relation in \eqref{lambda} yields a $\lambda<0$, it is also implied that $\{z_t\},t\geq 0$ such that $z_t=H_t H_{t-1}\ldots H_0z_0$ is stable.
 \begin{example}[Linear Prediction]
-Let the data represented as $(input,output)$ be $(X_t,Y_t)\in \{(2,1), (4,2)\}$ with equal probability. The problem of linear prediction is then to find $\theta^*\in R$ such that it minimizes the loss $\E(X_t \theta^* -Y_t)^2$, and the SGD algorithm to solve find $\theta^*$ is given by
+Let the data represented as $(input,output)$ be $(X_t,Y_t)\in \{(2,0), (4,0)\}$ with equal probability. The problem of linear prediction is then to find $\theta^*\in R$ such that it minimizes the loss $\E(X_t \theta^* -Y_t)^2$, and the SGD algorithm to solve find $\theta^*$ is given by
 \begin{align}
 \theta_{t+1}=\theta_t+\alpha(y_t X_t-X_t\otimes X_t\theta_t),
 \end{align}
@@ -20,11 +20,11 @@ We now derive $\alpha^{\lambda}_{\max}$ which is the maximum allowable step-size
 \begin{align}
 \lambda=\frac{1}{2}\log(1-\alpha)+\frac{1}{2}\log(1-\alpha 4).
 \end{align}
-For stability we need $\lambda<0$, i.e., $-1<(1-\alpha)(1-alpha 4)<1$, which translates to the condition $0<\alpha<\alpha^{\lambda}_{\max}=\frac{5}{4}$. It is clear that $\alpha^{\lambda}_{\max}>\frac{2}{\E[H]}=0.8\alpha_{\max}$.
+For stability we need $\lambda<0$, i.e., $-1<(1-\alpha)(1-alpha 4)<1$, which translates to the condition $0<\alpha<\alpha^{\lambda}_{\max}=\frac{5}{4}$. It is clear that $\alpha^{\lambda}_{\max}>\frac{2}{\E[H]}=0.8>\alpha_{\max}$.
 \end{example}
 A similar counter example can be provided in the asymmetric case as follows
 \begin{example}[General LSA]
-Consider the LSA in \eqref{linearrec} with $x_t\in \R$ and $H_t\sim \{-1, 2\}$ (with equal probability). Then 
+Consider the LSA in \eqref{linearrec} with $x_t\in \R$ and $H_t\sim \{-1, 2\}$ (with equal probability)  and $g_t=0$. Then 
 $
 \alpha_{\max}<\frac{2H}{\E[H_t^\top H_t]}=\frac{2}{5}
 $

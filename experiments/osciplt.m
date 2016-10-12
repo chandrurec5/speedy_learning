@@ -1,0 +1,1 @@
+alpha=0.8;iters=200;n=100;x=zeros(iters+1,n);for i=1:n[a,b]= osci(iters,alpha);x(:,i)=a;end;y=mean(x,2);fptr=fopen('asymm_unstable','w');for i=iters-100:itersfprintf(fptr,'%d\t%e\n',i,y(i)*1e25);end;fclose(fptr);fptr=fopen('asymm_unstable_samp','w');for i=iters-100:10:itersfprintf(fptr,'%d\t%e\n',i,y(i)*1e25);end;fclose(fptr);

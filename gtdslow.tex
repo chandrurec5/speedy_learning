@@ -1,0 +1,43 @@
+\FloatBarrier
+\begin{figure}[htp]
+\begin{minipage}{0.5\textwidth}
+\resizebox{1.0\textwidth}{!}{
+\begin{tabular}{cc}
+\begin{tikzpicture}[scale=1,font=\Large,]
+    \begin{axis}[
+        xlabel=$t$,
+        ylabel=error,legend style={at={(0.5,-0.1)},anchor=north}
+]
+
+    \addplot[thick,dashed,mark=square,red] plot file {./experiments/err_gtd};
+    \addplot[thick,dashed,mark=diamond,blue] plot file {./experiments/err_gtdmp};
+    \addplot[thick,dashed,mark=otimes,blue] plot file {./experiments/err_td};
+
+\addlegendentry{{GTD}}
+\addlegendentry{{GTD-MP}}
+\addlegendentry{{TD-RP}}
+
+    \end{axis}
+    \end{tikzpicture}
+
+&
+\begin{tikzpicture}[scale=1,font=\Large,]
+    \begin{axis}[
+        xlabel=$t$,
+        ylabel=error,legend style={at={(0.5,-0.1)},anchor=north}
+]
+
+    \addplot[thick,dashed,mark=square,red] plot file {./experiments/baird_err_gtd};
+    \addplot[thick,dashed,mark=diamond,blue] plot file {./experiments/baird_err_gtdmp};
+
+\addlegendentry{{GTD}}
+\addlegendentry{{GTD-MP}}
+
+
+    \end{axis}
+    \end{tikzpicture}
+
+\end{tabular}
+}
+\end{minipage}
+\end{figure}
