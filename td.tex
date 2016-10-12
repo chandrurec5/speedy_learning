@@ -1,4 +1,20 @@
 \section{Temporal Difference Learning Algorithms}
+\subsection{Noisy Discretization Schemes}
+The idea of using ODEs is not restricted to just analysis, and can extend to synthesis, i.e., new SA algorithms can be obtained as noisy discretization of ODEs (which converges to the desired solution). Discretization is a common theme in numerical solution methods to solve ODEs, and of particular interest are the Euler discretization and the \emph{predictor-corrector} discretization schemes. Given an ODE $\dot{x}(t)=(g-Hx(t))$, the noisy Euler discretization is given in \eqref{linearrec} and the noisy PC discretization is given by
+\begin{align}\label{PC}
+\begin{split}
+x^m_{t}&=x_t+\alpha_t(g-Hx_t)\\
+x_{t+1}&=x_t+\alpha_t(g-Hx^m_t)
+\end{split}
+\end{align}
+The idea behind the PC method is to first take a step in the gradient direction to produce a new point $x^m_t$, and then obtain the estimate of the gradient at $x^m_t$ to be used to update $x_t$. Notice that the PC updates can be unfurled and written as the following single recursion
+\begin{align*}
+\begin{split}
+x_{t+1}&=x_t+\alpha_t(g-H(x_t+\alpha_t(g-Hx_t)))\\
+&=x_t+\alpha_t(g+\alpha_t g- H +\alpha_t H^2)x_t \\
+&= (I-\alpha_t H+\alpha_t^2 H^2)x_t+\alpha_t(g-\alpha_t H g)
+\end{split}
+\end{align*}
 The \emph{temporal difference} (TD) class of learning algorithms solve the projected Bellman equation. Since in the RL setting, $b_\pi$ and $A_\pi$ are not known explicitly, the TD algorithms perform updates based on noisy observations, and are hence LSA algorithms as well. The different designs of the TD algorithms are meant to address the different issues such as stability and speed of convergence.
 While the design changes (primary/composite) across the different TD variants, a common feature amongst almost all the TD algorithms is the use of the temporal difference which is given by
 \begin{align}\label{td}
@@ -42,7 +58,7 @@ Consider a two state MDP with $P_\pi=
 \subsection{Gradient Temporal Difference Learning}
 The instability of TD($0$) is due to the fact that it is not a true gradient descent algorithm. The first gradient-TD (GTD) algorithm was proposed in \cite{} and is based on minimizing the \emph{norm of the expected TD update} (NEU) given by
 \begin{align}\label{neu}
-NEW(\theta)=\parallel b_\pi -A_\pi\theta\parallel^2
+NEU(\theta)=\parallel b_\pi -A_\pi\theta\parallel^2
 =\E[\rho_t\phi_t^\top\delta_t(\theta)]^\top\E[\rho_t\phi_t^\top\delta_t(\theta)]
 \end{align}
 The GTD scheme based is on the gradient of the above expression which is given by (dropping subscript $t$ for convenience) $-\frac{1}{2}\nabla NEU(\theta)=\E[\rho (\phi-\gamma\phi')^\top \phi]\E[\rho \phi^\top\delta(\theta)]$. Since the gradient is a product of two expectation we cannot use a sample product (due to the presence of correlations). The GTD addresses this issue by estimating $\E[\rho\delta\phi^\top]$ in a separate recursion. The GTD updates can be given by

@@ -1,21 +1,20 @@
-\section{Main Result}
 \begin{lemma}
 For $H_t, H$ as in condition~\ref{pd} of \Cref{lsaassump}, there exists a $\alpha_{\max}>0$ such that $(H^\top+H)-\alpha (\E[H_t^\top H_t])\geq 0, \forall 0< \alpha<\alpha_{\max}$ 
 \end{lemma}
 \begin{proof}
-The proof is complete by noting that $H^\top+H$ and $\E[H^\top_t+H]$ are real symmetric positive definite matrices.
+The proof is complete by noting that $H^\top+H$ and $\E[H^\top_t H]$ are real symmetric positive definite matrices.
 \end{proof}
-Let $0<\alpha<\alpha_{\max}$, then $\rho_{\alpha}\eqdef\parallel I-\alpha(H^\top+H)+\E[H^\top_t H_t]\parallel$ (where $\parallel\cdot\parallel$ is the spectral norm).
+Let $0<\alpha<\alpha_{\max}$, then $\rho_{\alpha}\eqdef\parallel I-\alpha(H^\top+H)+\alpha^2\E[H^\top_t H_t]\parallel$ (where $\parallel\cdot\parallel$ is the spectral norm). The following theorem is similar to 
 \begin{theorem}
-Let $\bar{x}_t=\frac{1}{t}\sum_{i=0}^{t-1} x_t$ be the Rupert-Polyak average of the iterates of LSA algorithm in \eqref{las}. Then for $0<\alpha< \alpha_{\max}$, we have
+Let $\bar{x}_t=\frac{1}{t}\sum_{i=0}^{t-1} x_t$ be the Rupert-Polyak average of the iterates of LSA algorithm in \eqref{linearrec}. Then for $0<\alpha< \alpha_{\max}$, we have
 \begin{align}
-\E[\bar{x}_t-x^*]\leq \Big(\frac{2}{(1-\rho_{\alpha})t}\Big)^2\parallel x_0-x^*\parallel^2+ \Big(\frac{1}{(1-\rho_{\alpha})t}\Big)\alpha^2\sigma^2
+&\E[\parallel \bar{x}_t-x^*\parallel^2]\leq \underbrace{\Big(\frac{2}{(1-\rho_{\alpha})^2t^2}\Big)\parallel x_0-x^*\parallel^2}_{\text{Bias}}\\&+\underbrace{\Big(\frac{1}{(1-\rho_{\alpha})t}\Big)\alpha^2\sigma^2}_{\text{Variance}}
 \end{align}
 \end{theorem}
 \begin{proof}
 Let for $t> k $, $F_{t,k}=\prod_{i=k}^t(I-\alpha_i H_i)$ and for $t\leq k$, $F_{t,k}=I$. Further, we have ${x}_t-x^*=F_{t,i} (x_i-x_0)+\sum_{k=i}^{t}\alpha_i F_{t,k+1}N_{i+1}$
 \begin{align*}
-&\E\parallel\bar{x}_t-x^*\parallel^2=\E\parallel\frac{1}{t}\sum_{i=0}^{t-1} (x_i-x^*)\parallel^2\\
+&\E[\parallel\bar{x}_t-x^*\parallel^2]=\E\parallel\frac{1}{t}\sum_{i=0}^{t-1} (x_i-x^*)\parallel^2\\
 &=\frac{1}{t^2}\E\sum_{i=0}^{t-1} \sum_{j=0}^{t-1}(x_i-x^*)^\top(x_j-x^*)\\
 %&=\frac{1}{t^2}\E\sum_{i=0}^{t-1}\big((x_i-x^*)F^\top_{i,0} F_{i,0}(x_i-x^*)\\&+ \sum_{j=i+1}^{t-1}(x_i-x^*)^\top F^\top_{j,i}F^\top_{j,i} (x_i-x^*)\\&+ \sum_{j=0}^{i-1}(x_0-x^*)^\top F^\top_{j,0}F^%\top_{j,0} (x_0-x^*)\big)\\
 &=\textbf{Bias}+\textbf{Variance}
@@ -34,5 +33,4 @@ Let $z^*\eqdef x^*, z_0\eqdef x_0$, and $z_t-z^*\eqdef F_{t,0}(x_0-x^*)$, then w
 &\leq \frac{\alpha^2}{t^2}[\sum_{i=0}^{t-1}\sigma^2 \frac{1}{1-\rho_{\alpha}}]\\
 &\leq \frac{\alpha^2\sigma^2}{(1-\rho_\alpha)t}
 \end{align*}
-
 \end{proof}

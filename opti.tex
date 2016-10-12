@@ -1,0 +1,38 @@
+\subsection{Maximum Allowable Step-Size}
+The condition that $0<\alpha<\alpha_{\max}$ ensures that $\rho_{\alpha}<1$ and in \cite{} authors conjecture that this bound on $\alpha_{\max}$ is strict i.e., there exists some initial condition $x_0$ for which the LSA in \eqref{linearrec} is unstable. We now present a theorem from \cite{} and a simple counter examples to falsify this conjecture.
+\begin{theorem}\label{explog}
+Let $\mathcal{H}=(H_t), t\geq 0$ be a stationary process of $n\times n$ real-valued matrices over some probability space $(\Omega,\F,\mathcal{P})$. If $\E\log^+\parallel H_0\parallel<\infty$ (where $\log^+ x$ denotes the positive part of $\log x$), then there exists a $\lambda\in \R$ that satisfies
+\begin{align}\label{lambda}
+\lambda=\lim_{t}\frac{1}{t}\log\parallel H_t H_{t-1}\ldots H_0\parallel
+\end{align}
+\end{theorem}
+In the case when the implicit relation in \eqref{lambda} yields a $\lambda<0$, it is also implied that $\{z_t\},t\geq 0$ such that $z_t=H_t H_{t-1}\ldots H_0z_0$ is stable.
+\begin{example}[Linear Prediction]
+Let the data represented as $(input,output)$ be $(X_t,Y_t)\in \{(2,1), (4,2)\}$ with equal probability. The problem of linear prediction is then to find $\theta^*\in R$ such that it minimizes the loss $\E(X_t \theta^* -Y_t)^2$, and the SGD algorithm to solve find $\theta^*$ is given by
+\begin{align}
+\theta_{t+1}=\theta_t+\alpha(y_t X_t-X_t\otimes X_t\theta_t),
+\end{align}
+where $\alpha$ is the constant step-size. Now the condition on $\alpha_{\max}$ presented in \Cref{} and in \cite{},  which in this specific example translates to the following numerical condition 
+\begin{align*}
+\alpha_{\max}<\frac{2H}{\E[H_t^\top H_t]}=\frac{10}{17}
+\end{align*}
+We now derive $\alpha^{\lambda}_{\max}$ which is the maximum allowable step-size as suggested by the implicit relation in \eqref{lambda}. We have
+\begin{align}
+\lambda=\frac{1}{2}\log(1-\alpha)+\frac{1}{2}\log(1-\alpha 4).
+\end{align}
+For stability we need $\lambda<0$, i.e., $-1<(1-\alpha)(1-alpha 4)<1$, which translates to the condition $0<\alpha<\alpha^{\lambda}_{\max}=\frac{5}{4}$. It is clear that $\alpha^{\lambda}_{\max}>\alpha_{\max}$.
+\end{example}
+A similar counter example can be provided in the asymmetric case as follows
+\begin{example}[General LSA]
+Consider the LSA in \eqref{linearrec} with $x_t\in \R$ and $H_t\sim \{-1, 2\}$ (with equal probability). Then 
+$
+\alpha_{\max}<\frac{2H}{\E[H_t^\top H_t]}=\frac{2}{5}
+$
+and since 
+$
+\lambda=\frac{1}{2}\log(1+\alpha)+\frac{1}{2}\log(1-\alpha 2).
+$
+we have $\alpha^{\lambda}_{\max}=0.78078$. It is clear that $\alpha^{\lambda}_{\max}>\alpha_{\max}$.
+\end{example}
+
+

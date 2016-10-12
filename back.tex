@@ -1,4 +1,4 @@
-\section{Background}
+\section{Application in Reinforcement Learning}
 We now present a brief overview of Markov Decision Processes (MDPs) which is a framework to describe the RL setting, i.e., the agent's interaction with the environment. An MDP is a five tuple and is denoted by $M=\{S,A,P,R,\gamma\}$, where $S$ is the state space, $A$ is the action space, $P=(p_a(s,s'),a\in A,s,s’\in S)$ is the probability transition kernel that specifies the probability of transitioning from state $s$ to $s'$ when the agent taking an action $a$, and $R(s,a)\colon S\times A\ra \R$ is the reward for taking an action $a$ in state $s$ and $0<\gamma<1$ is a given discount factor. A stationary deterministic policy (or simply a policy) is a denoted by $\pi=(\pi(s,\cdot),s\in S)$, where $\pi(s,\cdot)$ is a probability distribution over the set of actions. The infinite horizon discounted reward of a policy $\pi$ is given by
 \begin{align}
 J_\pi=\mathbf{E}[\sum_{t=0}^\infty \gamma^t R(s_t,a_t)| s_0=s, \pi],
