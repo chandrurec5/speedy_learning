@@ -15,12 +15,19 @@ Notice that the GTD methods have the least Eigen value and we expect them to per
 |\Lambda I-H|=\begin{bmatrix} \Lambda-I &-A_\pi \\ A_\pi^\top &0\\\end{bmatrix}=\Lambda^2-\Lambda +AA^\top=0
 \end{align}
 The design matrix $H$ has $2n$ Eigen values and given an Eigen $\mu$ of $A$, we have two Eigen values $\mu'_1$ and $\mu'_2$ of $H$ given by
-\begin{align}
+\begin{align}\label{gtdmpeig}
 \mu'_{i}=\frac{1\pm \sqrt{1-4\mu^2}}{2}, i=1,2
 \end{align}
 Thus $\mu'_1\approx 1-\mu^2$ and $\mu'_2\approx \mu^2$. In the case of $\M_1$, $\mu=0.1$ and $\mu’_2\approx (0.1)^2$. Since the GTD algorithms involving squaring of the eigen values of $A_\pi$, they are always stable since the design matrix of GTD is positive definite \cite{gtdref}. However, the squaring also reduces the rate of convergence when when the smaller Eigen value of $A_\pi$ is less than $1$.
 \input{gtdslow}
+Notice the GTD and GTD-MP have almost similar performance for the same step-size. This is because the design matrix of GTD and GTD-MP differ only by $O(\alpha)$ hence for small $\alpha$ the spectral properties of $H_{GTD}$ and $H_{GTD-MP}$ are similar.
 \subsection{Design of Update Equations}
+In this section, we present arguments that imply there is no clear winner amongst the various update methods. For instance, the squaring of the Eigen values in \eqref{gtdmpeig} can also lead to complex conjugate Eigen values, in which case the algorithm can exhibit oscillatory behaviour. In order to alleviate this problem with the GTD consider the following algorithm which we call the TD-Dual Sampling (TDDS) that makes use of two independent samples to compute $A_\pi^\top A_\pi$.
+\begin{align}\label{tdds}
+\text{TDDS:} y_t=\phi_t(R(s_t,a_t)+\gamma{\phi’_t}^\top\theta_t-\phi_t^\top \theta_t)\\
+\theta_{t+1}=\theta_t+\alpha_t(phi_t-\gamma{\phi’}_t)phi_t^\top y_t.
+\end{align}  
+The design of TDDS is given by $\D_{TDDS}=\langle b_\pi, A_\pi^\top A_\pi\rangle$ and since $H_{TDDS}$ is real symmetric and positive definite it always has positive real eigen values and the algorithm will not exhibit oscillatory behaviour.
 \input{gtdosci}
 \input{sqlslow}
 We now look at the speedy Q-learning (SQL) algorithm, and understand the spectral properties. Speedy Q-learning was introduced in \cite{} and uses a `speed-up' term to achieve better convergence rates. The SQL updates for the full state representation is given by
@@ -52,15 +59,27 @@ The ODE corresponding to SQLFA is given by
 \end{split}
 \end{align}
 Note that $(I-\gamma\Phi^\top D_\pi P_\pi\Phi)^{-1}A_\pi\neq I$ and hence the speed-up term does not successfully condition the linear system in the presence of function approximation.\par
-
-\begin{comment}
-The design corresponding to the above is given by $g_3=\begin{bmatrix}0\\ b_\pi\end{bmatrix}$, and $H_3=\begin{bmatrix} -A_\pi & I \\ -A_\pi & 0\end{bmatrix}$. The Eigen values of this design can be found by solving the following equations
+As an alternate to SQLFA, we come up with a different TD scheme which we call the speedy-TD-learning with function approximation (STDFA), by discretizing the following ODE
+\begin{align}
+\begin{split}
+\dot{y}(t)=(b_\pi-A_\pi\theta(t))\\
+\dot{\theta}(t)=(y(t)-A_\pi\theta(t))
+\end{split}
+\end{align}
+The update equation for the STDFA is given as follows:
+\begin{align}
+\begin{split}
+\theta_t&=\theta_t+\alpha_t(y_t-\phi(s_t)^\top(\phi(s_t)\theta_t-\gamma \phi(s_{t+1})\theta_t))\\
+y_{t+1}&=y_{t}+\alpha_t(\delta_t)
+\end{split}
+\end{align}
+The design corresponding to the above is given by $g_{STDFA}=\begin{bmatrix}0\\ b_\pi\end{bmatrix}$, and $H_{STDFA}=\begin{bmatrix} -A_\pi & I \\ -A_\pi & 0\end{bmatrix}$. The Eigen values of this design can be found by solving the following equations
 \begin{align}
 |\Lambda I-H|=\begin{bmatrix} \Lambda+A_\pi & -I \\ A_\pi & \Lambda\end{bmatrix}=(\Lambda+A_\pi)\Lambda+A_\pi=0
 \end{align}
-Thus if $\mu$ is a real Eigen value of $A_\pi$ and $\mu’_{1,2}$ corresponding Eigen values of $H_3$, we have the relation
+Thus if $\mu$ is a real Eigen value of $A_\pi$ and $\mu'_{1,2}$ corresponding Eigen values of $H_3$, we have the relation
 \begin{align}
 \mu’_{i}=\frac{\mu\pm\sqrt{\mu^2-4\mu}}{2}, i=1,2
 \end{align}
-Notice that for small values of $\mu$, $\mu’_i, i=1,2$ have imaginary parts and the real part is $\mu/2$. Thus this new scheme will be oscillatory (due to imaginary parts) and have poor convergence compared to \tdo since the real part gets divided by a factor of $2$.
-\end{comment}
+Notice that for small values of $\mu$, $\mu’_i, i=1,2$ have imaginary parts and the real part is $\mu/2$. Thus this new scheme will be oscillatory (due to imaginary parts) and have poor convergence compared to \tdo since the real part gets divided by a factor of $2$. A comparison of TD-RP, SQL, SQLFA, STDFA can be found in \Cref{}. 
+
