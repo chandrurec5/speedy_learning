@@ -1,11 +1,11 @@
-\begin{lemma}
+\begin{lemma}\label{alphacond}
 For $H_t, H$ as in condition~\ref{pd} of \Cref{lsaassump}, there exists a $\alpha_{\max}>0$ such that $(H^\top+H)-\alpha (\E[H_t^\top H_t])\geq 0, \forall 0< \alpha<\alpha_{\max}$ 
 \end{lemma}
 \begin{proof}
 The proof is complete by noting that $H^\top+H$ and $\E[H^\top_t H]$ are real symmetric positive definite matrices.
 \end{proof}
-Let $0<\alpha<\alpha_{\max}$, then $\rho_{\alpha}\eqdef\parallel I-\alpha(H^\top+H)+\alpha^2\E[H^\top_t H_t]\parallel$ (where $\parallel\cdot\parallel$ is the spectral norm). The following theorem is similar to 
-\begin{theorem}
+Let $0<\alpha<\alpha_{\max}$, then $\rho_{\alpha}\eqdef\parallel I-\alpha(H^\top+H)+\alpha^2\E[H^\top_t H_t]\parallel$ (where $\parallel\cdot\parallel$ is the spectral norm). The following theorem is similar to Theorem~$1$, \cite{bachaistats}.
+\begin{theorem}[Finite Time Bound]\label{maintheorem}
 Let $\bar{x}_t=\frac{1}{t}\sum_{i=0}^{t-1} x_t$ be the Rupert-Polyak average of the iterates of LSA algorithm in \eqref{linearrec}. Then for $0<\alpha< \alpha_{\max}$, we have
 \begin{align}
 &\E[\parallel \bar{x}_t-x^*\parallel^2]\leq \underbrace{\Big(\frac{2}{(1-\rho_{\alpha})^2t^2}\Big)\parallel x_0-x^*\parallel^2}_{\text{Bias}}\\&+\underbrace{\Big(\frac{1}{(1-\rho_{\alpha})t}\Big)\alpha^2\sigma^2}_{\text{Variance}}

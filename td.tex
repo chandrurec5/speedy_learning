@@ -39,7 +39,7 @@ where $\rho_t\stackrel{\cdot}{=}\rho(s_t,a_t)$ is the importance sampling ratio 
 \theta_{t+1}=\theta_t+\alpha_t(b_\pi-A^\mu_\pi)\theta_t+\alpha_t M_{t+1},
 \end{align}
 where $A^{\mu}_\pi=\Phi^\top D_\mu (I-\gamma P_\pi)\Phi$ , where $\mu$ is the behaviour policy used to sample the data. Thus the design of \tdo can in the off-policy case is $\{b_\pi,A^\mu_\pi\}$.
-The undoing of $TD(0)$ in the off-policy is due to the fact $A^\mu_\pi$ cannot be guaranteed to be positive definite. This condition can be demonstrated via the following simple example from \cite{}.
+The undoing of $TD(0)$ in the off-policy is due to the fact $A^\mu_\pi$ cannot be guaranteed to be positive definite. This condition can be demonstrated via the following simple example from \cite{etd}.
 \begin{example}
 Consider a two state MDP with $P_\pi=
 \begin{bmatrix}
@@ -56,7 +56,7 @@ Consider a two state MDP with $P_\pi=
 \end{example}
 %\input{offpol}
 \subsection{Gradient Temporal Difference Learning}
-The instability of TD($0$) is due to the fact that it is not a true gradient descent algorithm. The first gradient-TD (GTD) algorithm was proposed in \cite{} and is based on minimizing the \emph{norm of the expected TD update} (NEU) given by
+The instability of TD($0$) is due to the fact that it is not a true gradient descent algorithm. The first gradient-TD (GTD) algorithm was proposed in \cite{gtdref} and is based on minimizing the \emph{norm of the expected TD update} (NEU) given by
 \begin{align}\label{neu}
 NEU(\theta)=\parallel b_\pi -A_\pi\theta\parallel^2
 =\E[\rho_t\phi_t^\top\delta_t(\theta)]^\top\E[\rho_t\phi_t^\top\delta_t(\theta)]
@@ -74,7 +74,7 @@ Instead of NEU, the \emph{mean-square projected Bellman Error} (MSPBE) can also 
 \begin{align}\label{mspbe}
 MSPBE(\theta)=\parallel J_\theta-\Pi T_\pi J_\theta \parallel^2_D
 \end{align}
-The GTD2 algorithm was proposed in \cite{} based on minimizing \eqref{mspbe}. The GTD2 updates are given by
+The GTD2 algorithm was proposed in \cite{gtdfinite} based on minimizing \eqref{mspbe}. The GTD2 updates are given by
 \begin{align}
 \begin{split}
 \textbf{GTD2:\quad}y_{t+1}&=y_t+\beta_t\phi_t^\top(\rho_t\delta_t-\phi_t y_t)\\
@@ -92,7 +92,7 @@ The GTD-\emph{Mirror Prox}(GTD-MP) algorithm is given by the following update ru
 The GTD-MP algorithm in \eqref{gtdmp} is the PC discretization of the GTD algorithm with the design matrix as $\D_{GTD-MP}=\langle (I-\alpha_t H_{GTD})g_{GTD}, H_{GTD}-\alpha_t H^2_{GTD}\rangle$. In a similar fashion, one can derive the GTD2-MP algorithm as the PC discretization of GTD2 algorithm.\par
 \begin{comment}
 \subsection{Speedy Learning}
-Speedy Q-learning was introduced in \cite{} and uses a `speed-up' term to achieve better convergence rates. The SQL updates for the full state representation is given by
+Speedy Q-learning was introduced in \cite{sqlpaper} and uses a `speed-up' term to achieve better convergence rates. The SQL updates for the full state representation is given by
 \begin{align}\label{sql}
 \begin{split}
 &\textbf{SQL:\quad}\delta_t=R(s_t,a_t)+\gamma J_{t-1}(s_{t+1})-J_{t}(s_t),\\

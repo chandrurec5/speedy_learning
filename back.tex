@@ -25,7 +25,7 @@ We consider a policy evaluation setting, i.e., we are interested in computing th
 \subsection{Function Approximation}
 The term \emph{curse-of-dimensionality} denotes the fact that $|S|$ scales exponentially in the number of state variables. Due to the curse, MDPs in practice tend to have large number of states. Solving the linear system in \eqref{be} involves matrix inversion and requires a minimum of $O(|S|^2)$ computations, and hence it is impractical to solve the BE when $|S|$ is large. A practical way to address this issue is to approximate the value function. A widely adopted approach is function approximation, wherein the value function is approximated by a parameterized family of functions $J_\pi\approx J_\theta= \Phi(\theta^*)$, where $\{\Phi(\theta), \theta\in \R^n\}$ is the parameterized family and $\theta^*\in \R^n$ is the optimal parameter. Note that the parameter $\theta \in\R^n$ and dimensionality reduction is achieved by choosing $n<<|S|$. Linear parameterization is the most common, wherein, $J_\pi\approx J_\theta =\Phi\theta^*$, with $\Phi$ as a $|S|\times n$ feature matrix.
 \subsection{Projected Bellman Equation}
-Once $\Phi$ is fixed, a procedure to comput $\theta^*$ needs to be specified. An immediate idea is to take a cue from linear regression and look at the following quadratic loss function that quantifies the approximation error.
+Once $\Phi$ is fixed, a procedure to compute $\theta^*$ needs to be specified. An immediate idea is to take a cue from linear regression and look at the following quadratic loss function that quantifies the approximation error.
 \begin{align}
 L(\theta)=\sum_{s\in S}(J_\theta-TJ_\theta)^2.
 \end{align}

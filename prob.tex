@@ -1,36 +1,36 @@
 \section{Problem Setup}
-We consider Linear Stochastic Approximation (LSA) algorithms. An LSA algorithm with design $\D=\langle g,H\rangle$ in $n$ variables is the following stochastic recursion:
+A linear stochastic approximation (LSA) algorithm with design $\D=\langle g,H\rangle$ in $n$ variables is given by the following stochastic recursion:
 \begin{align}\label{linearrec}
 x_{t+1}=x_t+\alpha_t(g-H_t x_t)+\alpha_t N_{t+1}.
 \end{align}
-The assumptions on the variables in \eqref{linearrec} are as under
+The assumptions on the quantities in \eqref{linearrec} are as under.
 \begin{assumption}\label{lsaassump}
 \hspace{10pt}\\
 \vspace{-20pt}
 \begin{enumerate}[leftmargin=*]
-\item $x_t\in \R^n$ are the iterates and $\alpha_t\geq 0 ,\forall t\geq 0$ are the step-sizes.
+\item $x_t\in \R^n$ are the iterates and $\{\alpha_t\geq 0 ,\forall t\geq 0\}$ is the step-size rule.
 \item\label{pd} $H_t\in \R^{n\times n}$ are i.i.d matrices with $\E[H_t]=H$, where $H$ is a real positive definite design matrix.
 \item $g\in \R^n$ is the design vector.
-\item $N_{t+1}$ are martingale difference term such that $\E[\parallel N_{t+1} \parallel^2]\leq \sigma^2$ for some variance $\sigma\in \R^+$.
+\item $N_{t+1}$ are martingale difference terms  with respect to an increasing family of $\sigma$-fields $\mathcal{F}_t\stackrel{\cdot}{=}\sigma(x_0,N_1,\ldots,N_t),t\geq 0$, such that $\E[\parallel N_{t+1} \parallel^2]\leq \sigma^2$ for some variance $\sigma>0$.
 \end{enumerate}
 \end{assumption}
-\subsection{ODE and Asymptotic Results}
-\begin{theorem}[Asymptotics]\label{linstab} When the step-size rule $\{\alpha_t,t\geq 0\}$ is such that $\sum_{t\geq 0} alpha_t =\infty$ and $\sum_{t\geq 0} alpha^2_t <\infty$, then
+\subsection{ODE and Asymptotic Results}\label{asymp}
+\begin{theorem}[Asymptotics]\label{linstab} When the step-size rule $\{\alpha_t,t\geq 0\}$ is such that $\sum_{t\geq 0} \alpha_t =\infty$ and $\sum_{t\geq 0} \alpha^2_t <\infty$, then
 \begin{enumerate}[leftmargin=*] 
-\item Let $x(s),s\geq 0$ denote the solution to the ordinary differential equation (ODE) $\dot{x}(s)=g-Hx(s)$, with $x(0)=x_0$ and let $s(t)=\sum_{0\leq k< t}\alpha_k$. Under the above assumptions we have iterates $x_t\ra x(s(t))$ as $t\ra\infty$.
-\item The iterates in the linear stochastic update rule in \eqref{linearrec} converge to $x^*=H^{-1}g$ the unique asymptotic stable equilibrium of the ODE $\dot{x}(s)=g-Hx(s)$, i.e., $x_t\ra H^{-1}g$ as $t\ra\infty$.
+\item Let $x(s),s\geq 0$ denote the solution to the ordinary differential equation (ODE) $\dot{x}(s)=g-Hx(s)$, with $x(0)=x_0$ and let $s(t)=\sum_{0\leq k< t}\alpha_k$. Under \Cref{lsaasump} we have iterates $x_t\ra x(s(t))$ as $t\ra\infty$.
+\item Let $x^*=H^{-1}g$ be the unique asymptotic stable equilibrium of the ODE $\dot{x}(s)=g-Hx(s)$. Then the iterates in the LSA algorithm in \eqref{linearrec} converge to $x^*$ i.e., $x_t\ra H^{-1}g$ as $t\ra\infty$.
 \end{enumerate}
 \end{theorem}
 \begin{proof}
 Follows from arguments in Chapter~$2$, \cite{borkarsa}.
 \end{proof}
-The important take away from \Cref{linstab} is that for diminishing step-sizes the LSA follows the trajectory of the ODE and it converges to the desired solution when $H$ is positive definite. We now illustrate the role played by the step-size rule in the rate of convergence of the LSA algorithm by looking at an approximate expression for forgetting the initial condition $x_0$. Suppose, the design matrix $H$ has all positive Eigen values given by $\{\mu_i,i=1,\ldots,n\}$, then it is known from standard results in linear system theory \cite{} that the trajectory $x(s),s\geq 0$ of the ODE $\dot{x}(s)=(g-Hx(s))$ with $x(0)=x_0$ is given by
+The important take away from \Cref{linstab} is that for diminishing step-sizes the iterates $x_t$ of the LSA algorithm follow the trajectory of a corresponding ODE and they converge to the desired solution when $H$ is positive definite. We now illustrate the role played by the step-size rule in the rate of convergence of the LSA algorithm by looking at an approximate expression for forgetting the initial condition $x_0$. Suppose, the design matrix $H$ has all positive Eigen values given by $\{\mu_i,i=1,\ldots,n\}$, then it is known from standard results in linear system theory \cite{chen} that the trajectory $x(s),s\geq 0$ of the ODE $\dot{x}(s)=(g-Hx(s))$ with $x(0)=x_0$ is given by
 \begin{align}\label{oderate}
 x(s)=\sum_{i=1}^n \zeta_i e^{-\mu_i s}, 
 \end{align}
-where $\zeta=(\zeta_i,i=1,\ldots,n)\in \R^n$ are real coefficients. The time $s\geq 0$ in \eqref{oderate} is \emph{real} time and the time corresponding to the $t^{th}$ iterate of the algorithm is roughly $s(t)\approx\sum_{0\leq k<t}\alpha_t$. It is easy to see from \eqref{oderate} that the rate of forgetting initial conditions depends on the Eigen values values and the accumulation of algorithm time. For instance, if the step-size are chosen to be $\alpha_t=C/t$, then \begin{align}\label{biasforget}e^{-\mu_i\sum_{0\leq k<t}\alpha_t}\approx e^{-\mu_i Clog s}=O(1/s^{\mu_i C})\end{align}
-It is clear that the forgetting the initial condition depends both on the step-size rule which dictates accumulation of time i.e., $\sum_{0\leq k<t}\alpha_t$ and the smallest Eigen value of the design matrix. 
-\subsection{Main Results: Finite Time Performance Bounds}
-We now present the finite time performance of the LSA algorithms by deriving bounds $\E[\parallel x_n-x^*\parallel^2]$. The bound involves two terms namely the \emph{bias} term due to the initial condition $x_0$ and the variance term due to the noise term. 
+where $\zeta=(\zeta_i,i=1,\ldots,n)\in \R^n$ are real coefficients. The time $s\geq 0$ in \eqref{oderate} is \emph{real} time and the time corresponding to the $t^{th}$ iterate of the LSA algorithm is roughly $s(t)\approx\sum_{0\leq k<t}\alpha_t$. It is easy to see from \eqref{oderate} that the rate of forgetting initial conditions depends on the Eigen values and the accumulation of the algorithm time. For instance, if the step-size rule is chosen to be $\alpha_t=C/t$, then \begin{align}\label{biasforget}e^{-\mu_i\sum_{0\leq k<t}\alpha_t}\approx e^{-\mu_i Clog s}=O(1/s^{\mu_i C})\end{align}
+It is clear that the forgetting of the initial condition depends both on the step-size rule which dictates accumulation of time i.e., $\sum_{0\leq k<t}\alpha_t$ and the Eigen values (error term due to the smallest Eigen value dominates the other terms) of the design matrix. 
+\subsection{Main Results: Finite Time Performance Bounds}\label{main result}
+We now present the finite time performance of the LSA algorithm by deriving bounds for $\E[\parallel x_n-x^*\parallel^2]$. The bound involves two terms namely the \emph{bias} term due to the initial condition $x_0$ and the variance term due to the noise term. 
 \input{ft.tex}
 \input{opti.tex}

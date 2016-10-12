@@ -1,5 +1,5 @@
 \section{Spectra and Convergence}
-The constant term in \Cref{bndthm} depends on $\rho_\alpha$, which in turn depends on the spectral properties of the design matrix $H$. In particular, when $H$ is symmetric and positive definite, $\rho_{\alpha}$ depends on the smallest Eigen value of $H$. The effect of the Eigen values of $H$ on forgetting the bias was discusses in \Cref{initial}. Thus it is possible to make qualitative comments about the performance of the algorithm by looking at the spectrum of the design matrix. For instance, consider the design matrix corresponding to the following trivial MDP $\M_1$. 
+The constant term in \Cref{maintheorem} depends on $\rho_\alpha$, which in turn depends on the spectral properties of the design matrix $H$. In particular, when $H$ is symmetric and positive definite, $\rho_{\alpha}$ depends on the smallest Eigen value of $H$. The effect of the Eigen values of $H$ on forgetting the bias was discussed in \Cref{asymp}. Thus it is possible to make qualitative comments about the performance of the algorithm by looking at the spectrum of the design matrix. For instance, consider the design matrix corresponding \Cref{onestate}
 \FloatBarrier
 \begin{table}[h]
 \begin{tabular}{|c|c|c|} \hline 
@@ -21,7 +21,7 @@ The design matrix $H$ has $2n$ Eigen values and given an Eigen $\mu$ of $A$, we 
 Thus $\mu'_1\approx 1-\mu^2$ and $\mu'_2\approx \mu^2$. In the case of $\M_1$, $\mu=0.1$ and $\mu’_2\approx (0.1)^2$. Since the GTD algorithms involving squaring of the eigen values of $A_\pi$, they are always stable since the design matrix of GTD is positive definite \cite{gtdref}. However, the squaring also reduces the rate of convergence when when the smaller Eigen value of $A_\pi$ is less than $1$.
 \input{gtdslow}
 Notice the GTD and GTD-MP have almost similar performance for the same step-size. This is because the design matrix of GTD and GTD-MP differ only by $O(\alpha)$ hence for small $\alpha$ the spectral properties of $H_{GTD}$ and $H_{GTD-MP}$ are similar.
-\subsection{Design of Update Equations}
+\subsection{Design of Update Equations}\label{design}
 In this section, we present arguments that imply there is no clear winner amongst the various update methods. For instance, the squaring of the Eigen values in \eqref{gtdmpeig} can also lead to complex conjugate Eigen values, in which case the algorithm can exhibit oscillatory behaviour. In order to alleviate this problem with the GTD consider the following algorithm which we call the TD-Dual Sampling (TDDS) that makes use of two independent samples to compute $A_\pi^\top A_\pi$.
 \begin{align}\label{tdds}
 \text{TDDS:} y_t=\phi_t(R(s_t,a_t)+\gamma{\phi’_t}^\top\theta_t-\phi_t^\top \theta_t)\\
@@ -30,7 +30,7 @@ In this section, we present arguments that imply there is no clear winner amongs
 The design of TDDS is given by $\D_{TDDS}=\langle b_\pi, A_\pi^\top A_\pi\rangle$ and since $H_{TDDS}$ is real symmetric and positive definite it always has positive real eigen values and the algorithm will not exhibit oscillatory behaviour.
 \input{gtdosci}
 \input{sqlslow}
-We now look at the speedy Q-learning (SQL) algorithm, and understand the spectral properties. Speedy Q-learning was introduced in \cite{} and uses a `speed-up' term to achieve better convergence rates. The SQL updates for the full state representation is given by
+We now look at the speedy Q-learning (SQL) algorithm, and understand the spectral properties. Speedy Q-learning was introduced in \cite{sqlpaper} and uses a `speed-up' term to achieve better convergence rates. The SQL updates for the full state representation is given by
 \begin{align}\label{sql}
 \begin{split}
 &\textbf{SQL:\quad}\delta_t=R(s_t,a_t)+\gamma J_{t-1}(s_{t+1})-J_{t}(s_t),\\
@@ -38,13 +38,13 @@ We now look at the speedy Q-learning (SQL) algorithm, and understand the spectra
 \end{split}
 \end{align}
 Note that a speed-term $\Delta_t$ is added to the temporal difference term $\delta_t$. Also, the step size accompanying the speed up term is `aggressive’ in that it is $(1-\alpha_t)\approx 1$ for small $\alpha_t$. The ODE associated with SQL is given by
-\begin{align}
+\begin{align}\label{sqlode}
 \begin{split}
 \dot{J_\pi}(t)=(R_\pi+\gamma P_\pi J_\pi(t) -J_\pi(t))+\gamma P_\pi\dot{J_\pi}(t)\\
 \dot{J_\pi}(t)=\underbrace{(I-\gamma P_\pi)^{-1}R_\pi}_{\text{g}}-\underbrace{J_\pi(t))}_{HJ(t)}
 \end{split}
 \end{align}
-We hasten to add that the SQL in \eqref{sql} cannot be written in the form of \eqref{lsa} due to the presence of the speed-up term.\par 
+We hasten to add that the SQL in \eqref{sql} cannot be written in the form of \eqref{linearrec} due to the presence of the speed-up term.\par 
 The ODE in \eqref{sqlode} reveals the fact $H=-I$ for SQL, and effectively speed-up term changes the conditioning of the system. Nevertheless, the speed-up term does not affect the conditioning in a desirable manner when function approximation is used. In order to see this, consider the following RL algorithm called SQLFA which combines SQL and function approximation for the purpose of on-policy evaluation:
 \begin{align}\label{sqlfa}
 \begin{split}
