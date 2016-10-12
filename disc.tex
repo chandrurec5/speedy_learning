@@ -1,8 +1,5 @@
 \section{Spectra and Convergence}
 The constant term in \Cref{bndthm} depends on $\rho_\alpha$, which in turn depends on the spectral properties of the design matrix $H$. In particular, when $H$ is symmetric and positive definite, $\rho_{\alpha}$ depends on the smallest Eigen value of $H$. The effect of the Eigen values of $H$ on forgetting the bias was discusses in \Cref{initial}. Thus it is possible to make qualitative comments about the performance of the algorithm by looking at the spectrum of the design matrix. For instance, consider the design matrix corresponding to the following trivial MDP $\M_1$. 
-\begin{example}
-Let $M_1$ be a single state MDP, $P_\pi=1,D_\pi=1$, $b_\pi=R_\pi=1$ and $\gamma=0.9$ and $J_\pi=\frac{1}{1-\gamma}=10$.
-\end{example}
 \FloatBarrier
 \begin{table}[h]
 \begin{tabular}{|c|c|c|} \hline 
@@ -22,7 +19,7 @@ The design matrix $H$ has $2n$ Eigen values and given an Eigen $\mu$ of $A$, we 
 \mu'_{i}=\frac{1\pm \sqrt{1-4\mu^2}}{2}, i=1,2
 \end{align}
 Thus $\mu'_1\approx 1-\mu^2$ and $\mu'_2\approx \mu^2$. In the case of $\M_1$, $\mu=0.1$ and $\mu’_2\approx (0.1)^2$. Since the GTD algorithms involving squaring of the eigen values of $A_\pi$, they are always stable since the design matrix of GTD is positive definite \cite{gtdref}. However, the squaring also reduces the rate of convergence when when the smaller Eigen value of $A_\pi$ is less than $1$.
-\subsection{Baird Example}
+
 
 \subsection{Design of Update Equations}
 We now look at the speedy Q-learning (SQL) algorithm, and understand the spectral properties. Speedy Q-learning was introduced in \cite{} and uses a `speed-up' term to achieve better convergence rates. The SQL updates for the full state representation is given by

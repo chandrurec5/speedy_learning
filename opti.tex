@@ -20,7 +20,7 @@ We now derive $\alpha^{\lambda}_{\max}$ which is the maximum allowable step-size
 \begin{align}
 \lambda=\frac{1}{2}\log(1-\alpha)+\frac{1}{2}\log(1-\alpha 4).
 \end{align}
-For stability we need $\lambda<0$, i.e., $-1<(1-\alpha)(1-alpha 4)<1$, which translates to the condition $0<\alpha<\alpha^{\lambda}_{\max}=\frac{5}{4}$. It is clear that $\alpha^{\lambda}_{\max}>\alpha_{\max}$.
+For stability we need $\lambda<0$, i.e., $-1<(1-\alpha)(1-alpha 4)<1$, which translates to the condition $0<\alpha<\alpha^{\lambda}_{\max}=\frac{5}{4}$. It is clear that $\alpha^{\lambda}_{\max}>\frac{2}{\E[H]}=0.8\alpha_{\max}$.
 \end{example}
 A similar counter example can be provided in the asymmetric case as follows
 \begin{example}[General LSA]
@@ -32,7 +32,7 @@ and since
 $
 \lambda=\frac{1}{2}\log(1+\alpha)+\frac{1}{2}\log(1-\alpha 2).
 $
-we have $\alpha^{\lambda}_{\max}=0.78078$. It is clear that $\alpha^{\lambda}_{\max}>\alpha_{\max}$.
+we have $\alpha^{\lambda}_{\max}=0.78078$. It is clear that $\alpha^{\lambda}_{\max}>\alpha_{\max}$. However, in the asymmetric case we have $\frac{2}{\E[H]}=1>\alpha^{\lambda}_{\max}>\alpha_{\max}$.
 \end{example}
-
+\input{osci.tex}
 
