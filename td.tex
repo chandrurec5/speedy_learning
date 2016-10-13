@@ -1,3 +1,4 @@
+%!TEX root =  speedylearn.tex
 \section{Temporal Difference Learning Algorithms}
 \subsection{Noisy Discretization Schemes}
 The idea of using ODEs is not restricted to just analysis, and can extend to synthesis, i.e., new SA algorithms can be obtained as noisy discretization of ODEs (which converges to the desired solution). Discretization is a common theme in numerical solution methods to solve ODEs, and of particular interest are the Euler discretization and the \emph{predictor-corrector} discretization schemes. Given an ODE $\dot{x}(t)=(g-Hx(t))$, the noisy Euler discretization is given in \eqref{linearrec} and the noisy PC discretization is given by
@@ -56,7 +57,7 @@ Consider a two state MDP with $P_\pi=
 \end{example}
 %\input{offpol}
 \subsection{Gradient Temporal Difference Learning}
-The instability of TD($0$) is due to the fact that it is not a true gradient descent algorithm. The first gradient-TD (GTD) algorithm was proposed in \cite{gtdref} and is based on minimizing the \emph{norm of the expected TD update} (NEU) given by
+The instability of TD($0$) is due to the fact that it is not a true gradient descent algorithm. The first gradient-TD (GTD) algorithm was proposed by \citet{sutton2009convergent} and is based on minimizing the \emph{norm of the expected TD update} (NEU) given by
 \begin{align}\label{neu}
 NEU(\theta)=\parallel b_\pi -A_\pi\theta\parallel^2
 =\E[\rho_t\phi_t^\top\delta_t(\theta)]^\top\E[\rho_t\phi_t^\top\delta_t(\theta)]
@@ -74,7 +75,7 @@ Instead of NEU, the \emph{mean-square projected Bellman Error} (MSPBE) can also 
 \begin{align}\label{mspbe}
 MSPBE(\theta)=\parallel J_\theta-\Pi T_\pi J_\theta \parallel^2_D
 \end{align}
-The GTD2 algorithm was proposed in \cite{gtdfinite} based on minimizing \eqref{mspbe}. The GTD2 updates are given by
+The GTD2 algorithm was proposed in \cite{gtdref} based on minimizing \eqref{mspbe}. The GTD2 updates are given by
 \begin{align}
 \begin{split}
 \textbf{GTD2:\quad}y_{t+1}&=y_t+\beta_t\phi_t^\top(\rho_t\delta_t-\phi_t y_t)\\

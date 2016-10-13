@@ -1,10 +1,46 @@
+%!TEX root =  speedylearn.tex
+\usepackage[textsize=tiny]{todonotes}
+\setlength{\marginparwidth}{13ex}
+\newcommand{\todoc}[2][]{\todo[size=\scriptsize,color=blue!20!white,#1]{Csaba: #2}}
+\newcommand{\todoch}[2][]{\todo[size=\scriptsize,color=red!20!white,#1]{Chandru: #2}}
+\newcommand{\todox}[2][]{\todo[size=\scriptsize,color=green!20!white,#1]{Xiaowei: #2}}
+\usepackage{hyperref}
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+    unicode=false,          % non-Latin characters in AcrobatÕs bookmarks
+    pdftoolbar=true,        % show AcrobatÕs toolbar?
+    pdfmenubar=true,        % show AcrobatÕs menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdfstartview={FitH},    % fits the width of the page to the window
+    pdftitle={My title},    % title
+    pdfauthor={Author},     % author
+    pdfsubject={Subject},   % subject of the document
+    pdfcreator={Creator},   % creator of the document
+    pdfproducer={Producer}, % producer of the document
+    pdfkeywords={keyword1} {key2} {key3}, % list of keywords
+    pdfnewwindow=true,      % links in new window
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=red,          % color of internal links (change box color with linkbordercolor)
+    citecolor=blue,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+\usepackage{times}
+\usepackage{natbib}
+\usepackage{nicefrac}
+\usepackage{wrapfig}
+
+\let\temp\epsilon
+\let\epsilon\varepsilon
+
+
 \usepackage{pgfplots}
 \usepackage{pgf}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amsfonts}
 \usepackage{comment}
-\usepackage{cleveref}
+\usepackage[capitalize]{cleveref}
 \usepackage{enumitem}
 \usepackage{tikz}
 \usepackage{placeins}
@@ -17,13 +53,19 @@
 \newcommand{\ra}{\rightarrow}
 \newcommand{\tdo}{TD$(0)$}
 \newcommand{\eqdef}{\stackrel{\cdot}{=}}
+
+
+\theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[]
 \newtheorem{lemma}{Lemma}[]
-\newtheorem{assumption}{Assumption}[]
 \newtheorem{corollary}{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}[]
 \newtheorem{example}{Example}
 \newtheorem{remark}{Remark}
 \newtheorem{domain}{Domain}
+
 \usetikzlibrary{intersections}
 \usetikzlibrary{arrows,calc,fit,patterns,plotmarks,shapes.geometric,shapes.misc,shapes.symbols,   shapes.arrows,   shapes.callouts,   shapes.multipart,   shapes.gates.logic.US,   shapes.gates.logic.IEC,   er,   automata,   backgrounds,   chains,   topaths,   trees,   petri,   mindmap,   matrix,   calendar,   folding, fadings,   through,   positioning,   scopes,   decorations.fractals,   decorations.shapes,   decorations.text,   decorations.pathmorphing,   decorations.pathreplacing,   decorations.footprints,   decorations.markings, shadows}
 %\usetikzlibrary{arrows,calc,shapes, snakes, intersections,patterns,shadows}
