@@ -18,14 +18,14 @@ The design matrix $H$ has $2n$ Eigen values and given an Eigen $\mu$ of $A$, we 
 \begin{align}\label{gtdmpeig}
 \mu'_{i}=\frac{1\pm \sqrt{1-4\mu^2}}{2}, i=1,2
 \end{align}
-Thus $\mu'_1\approx 1-\mu^2$ and $\mu'_2\approx \mu^2$. In the case of $\M_1$, $\mu=0.1$ and $\mu’_2\approx (0.1)^2$. Since the GTD algorithms involving squaring of the eigen values of $A_\pi$, they are always stable since the design matrix of GTD is positive definite \cite{gtdref}. However, the squaring also reduces the rate of convergence when when the smaller Eigen value of $A_\pi$ is less than $1$.
+Thus $\mu'_1\approx 1-\mu^2$ and $\mu'_2\approx \mu^2$. In the case of $\M_1$, $\mu=0.1$ and $\mu’_2\approx (0.1)^2$. Since the GTD algorithms involving squaring of the eigen values of $A_\pi$, they are always stable since the design matrix of GTD is positive definite \cite{gtdref}. However, the squaring also reduces the rate of convergence when the smallest Eigen value of $A_\pi$ is less than $1$.
 \input{gtdslow}
 Notice the GTD and GTD-MP have almost similar performance for the same step-size. This is because the design matrix of GTD and GTD-MP differ only by $O(\alpha)$ hence for small $\alpha$ the spectral properties of $H_{GTD}$ and $H_{GTD-MP}$ are similar.
 \subsection{Design of Update Equations}\label{design}
 In this section, we present arguments that imply there is no clear winner amongst the various update methods. For instance, the squaring of the Eigen values in \eqref{gtdmpeig} can also lead to complex conjugate Eigen values, in which case the algorithm can exhibit oscillatory behaviour. In order to alleviate this problem with the GTD consider the following algorithm which we call the TD-Dual Sampling (TDDS) that makes use of two independent samples to compute $A_\pi^\top A_\pi$.
 \begin{align}\label{tdds}
 \text{TDDS:} y_t=\phi_t(R(s_t,a_t)+\gamma{\phi’_t}^\top\theta_t-\phi_t^\top \theta_t)\\
-\theta_{t+1}=\theta_t+\alpha_t(phi_t-\gamma{\phi’}_t)phi_t^\top y_t.
+\theta_{t+1}=\theta_t+\alpha_t(\phi_t-\gamma{\phi’}_t)phi_t^\top y_t.
 \end{align}  
 The design of TDDS is given by $\D_{TDDS}=\langle b_\pi, A_\pi^\top A_\pi\rangle$ and since $H_{TDDS}$ is real symmetric and positive definite it always has positive real eigen values and the algorithm will not exhibit oscillatory behaviour.
 \input{gtdosci}

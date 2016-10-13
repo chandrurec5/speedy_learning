@@ -9,9 +9,9 @@
         ylabel=error,legend style={at={(0.5,-0.1)},anchor=north}
 ]
 
-    \addplot[thick,dashed,mark=square,red] plot file {./experiments/err_gtd};
-    \addplot[thick,dashed,mark=diamond,blue] plot file {./experiments/err_gtdmp};
-    \addplot[thick,dashed,mark=otimes,blue] plot file {./experiments/err_td};
+    \addplot[thick,dashed,mark=square,red] plot file {./experiments/err_gtd_one};
+    \addplot[thick,dashed,mark=diamond,blue] plot file {./experiments/err_gtdmp_one};
+    \addplot[thick,dashed,mark=otimes,blue] plot file {./experiments/err_td_one};
 
 \addlegendentry{{GTD}}
 \addlegendentry{{GTD-MP}}
@@ -40,4 +40,6 @@
 \end{tabular}
 }
 \end{minipage}
+\caption{The plot on the left shows slower convergence of GTD and GTD-MP in comparison with TD-RP (TD with RP averaging) for \Cref{onestate}. Note that GTD and GTD-MP have similar performance owing to the similarity in their spectra. The plot on the right shows that the GTD and GTD-MP algorithms diverges for $\alpha=0.01$ in \Cref{baird}.}
+\label{gtdslow}
 \end{figure}
